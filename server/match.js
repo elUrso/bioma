@@ -96,7 +96,7 @@ let startMatch = (match) => {
     let client = User.getClient(id)
     let name = User.getName(id)
     client.send("! beginturn")
-    broadcast(match, `! gamelog Player ${name} Turn`)
+    broadcast(match, `! gamelog Player ${name} turn begun`)
 }
 
 let broadcast = (match, msg) => {

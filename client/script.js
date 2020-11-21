@@ -190,3 +190,16 @@ let matchBegin = (_) => {
     game.style.display = "block"
 }
 router["matchbegin"] = matchBegin
+
+let beginTurn = (_) => {
+    let commands = document.querySelector("#commands")
+    commands.style.display = "block"
+}
+router["beginturn"] = beginTurn
+
+let addToLog = (args) => {
+    let log = document.querySelector("#log")
+    log.innerHTML = `${log.innerHTML}<p>${args.join(" ")}</p>`
+}
+
+router["gamelog"] = addToLog
