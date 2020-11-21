@@ -6,25 +6,39 @@
     <title>Bioma</title>
 </head>
 <body>
-    <div>
-        <input type="text" placeholder="username" id="usernameInputField"/>
-        <input type="submit" value="login" onclick="connect()"/>
+    <div id="setup">
+        <div>
+            <input type="text" placeholder="username" id="usernameInputField"/>
+            <input type="submit" value="login" onclick="connect()"/>
+        </div>
+        <div id="playersOnline">
+            <button onclick="getPlayers()"> refresh online players </button>
+            <ul>
+            </ul>
+        </div>
+        <div id="lobby">
+            <input type="text" placeholder="match name" id="matchInputField"/>
+            <input type="submit" value="create match" onclick="createMatch()"/>
+            <button onclick="getMatches()"> refresh match list </button>
+            <ul>
+    
+            </ul>
+        </div>
+        <div id="state">
+            <div id="match" style="display: none;">
+                <p></p>
+                <button onclick="leaveMatch()">leave match</button>
+                <button onclick="setReady()">start match</button>
+            </div>
+            <div id="wait" style="display: none;">
+                Waiting for other players
+            </div>
+        </div>
     </div>
-    <div id="playersOnline">
-        <button onclick="getPlayers()"> refresh online players </button>
-        <ul>
-        </ul>
-    </div>
-    <div id="lobby">
-        <input type="text" placeholder="match name" id="matchInputField"/>
-        <input type="submit" value="create match" onclick="connect()"/>
-        <button> refresh match list </button>
-        <ul>
-
-        </ul>
-    </div>
-    <div id="state">
-
+    <div id="game" style="display: none;">
+        <button> gera numero </button>
+        <button> encerra turno </button>
+        <div id="log"></div>
     </div>
     
     <script src="script.js"></script>

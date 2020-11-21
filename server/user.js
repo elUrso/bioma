@@ -48,14 +48,14 @@ let dispatch = (id, client, data) => {
 }
 
 let setUsername = (id, client, args) => {
-    let deseridedUsername = args[0]
-    if(deseridedUsername in names) {
+    let desirededUsername = args[0]
+    if(desirededUsername in names) {
         client.send("err username already in use")
     } else {
-        names[deseridedUsername] = id
-        getClientState(id).name = deseridedUsername
+        names[desirededUsername] = id
+        getClientState(id).name = desirededUsername
         getClientState(id).valid = true
-        client.send(`ok username set to ${deseridedUsername}`)
+        client.send(`ok username set to ${desirededUsername}`)
     }
 }
 router["setusername"] = setUsername

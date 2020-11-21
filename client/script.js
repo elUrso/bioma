@@ -1,5 +1,6 @@
 let socket = 0
 let hanlderQueue = []
+let router = {}
 
 let connect = (onopen) => {
     let username = document.querySelector("#usernameInputField").value
@@ -9,7 +10,7 @@ let connect = (onopen) => {
             rpc(`setusername ${username}`, (e) => {
                 let reply = e.data
                 if(reply.startsWith("err")) {
-                    alert("Username already in use")
+                    alert(reply)
                     socket.close()
                 } else {
                     alert("login complete")
@@ -35,17 +36,32 @@ let rpc = (msg, handler) => {
 
 let consume = (e) => {
     console.log(e)
-    let handler = hanlderQueue.shift()
-    handler(e)
+    let split = e.data.split(" ")
+    if(split.shift() != "!") {
+        let handler = hanlderQueue.shift()
+        handler(e)
+    } else {
+        dispatch(split)
+    }
+}
+
+let dispatch = (args) => {
+    let command = args.shift()
+    if(command in router) {
+        router[command](args)
+    } else {
+        alert("err unknown command sent from server")
+    }
 }
 
 let getPlayers = () => {
     if(socket != 0) {
+        let ul = document.querySelector("#playersOnline>ul")
         rpc("getplayers", (e) => {
             let players = e.data.split(" ")
             players.shift()
             players.sort()
-            document.querySelector("#playersOnline>ul").innerHTML = renderPlayerList(players)
+            ul.innerHTML = renderPlayerList(players)
         })
     } else {
         alert("Please, login before")
@@ -58,4 +74,111 @@ let renderPlayerList = (players) => {
         ret = `${ret}<li>${username}</li>`
     })
     return ret
+}
+
+let createMatch = () => {
+    if(socket != 0) {
+        let name = document.querySelector("#matchInputField").value
+        rpc(`creatematch ${name}`, (e) => { 
+            let reply = e.data.split(" ")
+            let result = reply.shift()
+            if(result == "err") alert(e.data)
+            else {
+                let match = document.querySelector("#match")
+                let text = document.querySelector("#match>p")
+                text.innerHTML = name
+                // show match UI
+                match.style.display = "block"
+            } 
+        })
+    } else {
+        alert("Please, login before")
+    }
+}
+
+let getMatches = () => {
+    if(socket != 0) {
+        let ul = document.querySelector("#lobby>ul")
+        rpc(`getmatches`, (e) => {
+            let matches = e.data.split(" ")
+            matches.shift()
+            console.log(renderMatchList(matches))
+            ul.innerHTML = renderMatchList(matches)
+        })
+    } else {
+        alert("Please, login before")
+    }
+}
+
+let renderMatchList = (matches) => {
+    let ret = ""
+    pair(matches).forEach((x) => {
+        ret = `${ret}<li>${x[0]} (${x[1]}/2) <a href="#" onclick="joinMatch('${x[0]}')">join</a></li>`
+    })
+    return ret
+}
+
+let pair = (list) => {
+    let ret = []
+    let i = 0
+    while(i + 1 < list.length) {
+        ret.push([list[i], list[i+1]])
+        i = i + 2
+    }
+    return ret
+}
+
+let joinMatch = (match) => {
+    if(socket != 0) {
+        rpc(`joinmatch ${match}`, (e) => { 
+            let reply = e.data.split(" ")
+            let result = reply.shift()
+            if(result == "err") alert(e.data)
+            else {
+                let matchDiv = document.querySelector("#match")
+                let text = document.querySelector("#match>p")
+                text.innerHTML = match
+                // show match UI
+                matchDiv.style.display = "block"
+            } 
+        })
+    } else {
+        alert("Please, login before")
+    }
+}
+
+let leaveMatch = () => {
+    if(socket != 0) {
+        rpc("leavematch", (e) => {
+            let reply = e.data.split(" ")
+            let result = reply.shift()
+            if(result == "err") alert(e.data)
+            else {
+                let matchDiv = document.querySelector("#match")
+                // hide match UI
+                matchDiv.style.display = "none"
+            }
+        })
+    } else {
+        alert("Please, login before")
+    }
+}
+
+let setReady = () => {
+    if(socket != 0) {
+        rpc("setready", (e) => {
+            let reply = e.data.split(" ")
+            let result = reply.shift()
+            if(result == "err") alert(e.data)
+            else {
+                let matchDiv = document.querySelector("#match")
+                let waitDiv = document.querySelector("#wait")
+                // hide match UI
+                matchDiv.style.display = "none"
+                waitDiv.style.display = "block"
+            }
+        })
+    } else {
+        alert("Please, login before")
+    }
 }

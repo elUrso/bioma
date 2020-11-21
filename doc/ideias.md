@@ -25,10 +25,11 @@ Tasks do dia 1:
 deve fazer:
 * [X] `setusername` -> "login" do usuário
 * [X] `getplayers` -> lista os usuários conectados
-* [ ] `creatematch` -> cria uma partida
-* [ ] `joinmatch` -> ingressar numa partida
-* [ ] `getmatches` -> lista as partidas
-* [ ] `setready` -> define que está pronto
+* [x] `creatematch` -> cria uma partida
+* [x] `getmatches` -> lista as partidas
+* [x] `joinmatch` -> ingressar numa partida
+* [x] `leavematch` -> sair de uma partida
+* [x] `setready` -> define que está pronto
 * [ ] `matchbegin` -> a partida começa
 
 extra:
