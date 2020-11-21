@@ -30,7 +30,7 @@ deve fazer:
 * [x] `joinmatch` -> ingressar numa partida
 * [x] `leavematch` -> sair de uma partida
 * [x] `setready` -> define que está pronto
-* [ ] `matchbegin` -> a partida começa
+* [x] `matchbegin` -> a partida começa
 
 extra:
 * [ ] `getnumber` -> gera um numero aleatorio e envia para todos os jogadores (teste)

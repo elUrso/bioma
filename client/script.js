@@ -182,3 +182,11 @@ let setReady = () => {
         alert("Please, login before")
     }
 }
+
+let matchBegin = (_) => {
+    let setup = document.querySelector("#setup")
+    let game = document.querySelector("#game")
+    setup.style.display = "none"
+    game.style.display = "block"
+}
+router["matchbegin"] = matchBegin
