@@ -1,0 +1,14 @@
+{
+  "name": "bioma",
+  "version": "0.0.1",
+  "description": "An online strategy game",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js"
+  },
+  "author": "Vitor Silva",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "ws": "^7.4.0"
+  }
+}
