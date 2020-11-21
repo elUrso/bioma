@@ -213,3 +213,11 @@ let endTurn = () => {
         alert("Please, login before")
     }
 }
+
+let getNumber = () => {
+    if(socket != 0) {
+        rpc("getnumber", (_) => { })
+    } else {
+        alert("Please, login before")
+    }
+}

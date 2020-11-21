@@ -33,5 +33,5 @@ deve fazer:
 * [x] `matchbegin` -> a partida começa
 
 extra:
-* [ ] `getnumber` -> gera um numero aleatorio e envia para todos os jogadores (teste)
-* [ ] `endturn` -> encerra o turno
+* [x] `getnumber` -> gera um numero aleatorio e envia para todos os jogadores (teste)
+* [x] `endturn` -> encerra o turno

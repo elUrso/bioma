@@ -119,8 +119,16 @@ let endTurn = (id, client, args) => {
         client.send("err not in a match")
     }
 }
-
 router['endturn'] = endTurn
+
+let getNumber = (id, client, args) => {
+    let name = playerInMatch[id]
+    let match = matches[name]
+    let username = User.getName(id)
+    broadcast(match, `! gamelog Player ${username} got number ${Math.floor(Math.random() * 100)}`)
+    client.send("ok")
+}
+router['getnumber'] = getNumber
 
 let broadcast = (match, msg) => {
     match.playersID.forEach((id) => {
