@@ -23,11 +23,11 @@ pong() <- recebi um pong
 Tasks do dia 1:
 
 deve fazer:
-* [ ] `getplayers` -> lista os usuários conectados
-* [ ] `setusername` -> "login" do usuário
-* [ ] `getmatches` -> lista as partidas
-* [ ] `joinmatch` -> ingressar numa partida
+* [X] `setusername` -> "login" do usuário
+* [X] `getplayers` -> lista os usuários conectados
 * [ ] `creatematch` -> cria uma partida
+* [ ] `joinmatch` -> ingressar numa partida
+* [ ] `getmatches` -> lista as partidas
 * [ ] `setready` -> define que está pronto
 * [ ] `matchbegin` -> a partida começa
 

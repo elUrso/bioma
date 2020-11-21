@@ -1,6 +1,7 @@
 let clients = []
 let states = {}
 let names = {}
+let router = {}
 
 let addClient = (client) => {
     let id = clients.length
@@ -22,12 +23,51 @@ let attach = (client) => {
     setupHeartbeat(id)
     client.on('message', (data) => {
         console.log(`Got from ${id}: ${data}`)
-        client.send('Hi!')
+        dispatch(id, client, data)
     })
     client.on('close', () => {
-        console.log(`Client ${id} disconnected`)
+        let state = getClientState(id);
+        if(state.valid) {
+            let name = state.name
+            delete names[name]
+            delete states[id]
+            console.log(`Client ${id} (${name}) disconnected`)
+        }
+        
     })
 }
+
+let dispatch = (id, client, data) => {
+    let slice = data.split(" ")
+    let command = slice.shift()
+    if(command in router) {
+        router[command](id, client, slice)
+    } else {
+        client.send("err unknown command")
+    }
+}
+
+let setUsername = (id, client, args) => {
+    let deseridedUsername = args[0]
+    if(deseridedUsername in names) {
+        client.send("err username already in use")
+    } else {
+        names[deseridedUsername] = id
+        getClientState(id).name = deseridedUsername
+        getClientState(id).valid = true
+        client.send(`ok username set to ${deseridedUsername}`)
+    }
+}
+router["setusername"] = setUsername
+
+let getPlayers = (id, client, args) => {
+    let ret = "ok"
+    for(username in names) {
+        ret = `${ret} ${username}`
+    }
+    client.send(ret)
+}
+router["getplayers"] = getPlayers
 
 let setupHeartbeat = (id) => {
     let client = getClient(id)
@@ -59,4 +99,5 @@ class UserState {
     module.exports.addClient = addClient
     module.exports.getClient = getClient
     module.exports.attach = attach
+    module.exports.router = router
 })()
