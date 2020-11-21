@@ -78,6 +78,7 @@ let setReady = (id, client, args) => {
         let match = matches[name]
         match.playersReady.push(id)
         client.send("ok")
+        console.log(match)
         if(match.playersReady.length == match.capacity) {
             broadcast(match, "! matchbegin")
             match.ready = true
@@ -99,11 +100,33 @@ let startMatch = (match) => {
     broadcast(match, `! gamelog Player ${name} turn begun`)
 }
 
+let nextTurn = (match) => {
+    match.turn = match.turn + 1
+    let id = match.playersID[match.turn % match.capacity]
+    let client = User.getClient(id)
+    let name = User.getName(id)
+    client.send("! beginturn")
+    broadcast(match, `! gamelog Player ${name} turn begun`)
+}
+
+let endTurn = (id, client, args) => {
+    if(id in playerInMatch) {
+        let name = playerInMatch[id]
+        let match = matches[name]
+        nextTurn(match)
+        client.send("ok")
+    } else {
+        client.send("err not in a match")
+    }
+}
+
+router['endturn'] = endTurn
+
 let broadcast = (match, msg) => {
-    for(id in match.playersID) {
+    match.playersID.forEach((id) => {
         let client = User.getClient(id)
         client.send(msg)
-    }
+    })
 }
 
 let removePlayer = (match, id) => {

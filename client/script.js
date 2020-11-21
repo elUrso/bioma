@@ -201,5 +201,15 @@ let addToLog = (args) => {
     let log = document.querySelector("#log")
     log.innerHTML = `${log.innerHTML}<p>${args.join(" ")}</p>`
 }
-
 router["gamelog"] = addToLog
+
+let endTurn = () => {
+    if(socket != 0) {
+        rpc("endturn", (e) => {
+            let commands = document.querySelector("#commands")
+            commands.style.display = "none"
+        })
+    } else {
+        alert("Please, login before")
+    }
+}
