@@ -88,6 +88,10 @@ let setupHeartbeat = (id) => {
     })
 }
 
+let getName = (id) => {
+    return getClientState(id).name
+}
+
 class UserState {
     constructor() {
         this.alive = true
@@ -98,6 +102,7 @@ class UserState {
 (() => {
     module.exports.addClient = addClient
     module.exports.getClient = getClient
+    module.exports.getName = getName
     module.exports.attach = attach
     module.exports.router = router
 })()

@@ -1,11 +1,13 @@
 let router = {}
 let matches = {}
 let playerInMatch = {}
+let User = {}
 
-let inject = (User) => {
+let inject = (tgt) => {
     for(key in router) {
-        User.router[key] = router[key]
+        tgt.router[key] = router[key]
     }
+    User = tgt
 }
 
 let createMatch = (id, client, args)  => {
@@ -76,13 +78,33 @@ let setReady = (id, client, args) => {
         let match = matches[name]
         match.playersReady.push(id)
         client.send("ok")
-        if(match.playersReady.length == match.capacity)
-            client.send("! matchbegin")
+        if(match.playersReady.length == match.capacity) {
+            broadcast(match, "! matchbegin")
+            match.ready = true
+            match.turn = 0
+            startMatch(match)
+        }
     } else {
         client.send("err not in a match")
     }
 }
 router['setready'] = setReady
+
+let startMatch = (match) => {
+    // get first player to begin
+    let id = match.playersID[match.turn % match.capacity]
+    let client = User.getClient(id)
+    let name = User.getName(id)
+    client.send("! beginturn")
+    broadcast(match, `! gamelog Player ${name} Turn`)
+}
+
+let broadcast = (match, msg) => {
+    for(id in match.playersID) {
+        let client = User.getClient(id)
+        client.send(msg)
+    }
+}
 
 let removePlayer = (match, id) => {
     match.playersID.splice(match.playersID.indexOf(id))
@@ -93,6 +115,8 @@ class Match {
         this.playersID = []
         this.playersReady = []
         this.capacity = 2
+        this.ready = false
+        this.turn = 0
     }
 }
 
