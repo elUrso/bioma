@@ -5,7 +5,7 @@ let router = {}
 let connect = (onopen) => {
     let username = document.querySelector("#usernameInputField").value
     if(socket == 0) {
-        socket = new WebSocket("ws://192.168.0.7:7832")
+        socket = new WebSocket("ws://localhost:7832")
         socket.onopen = (e) => {
             rpc(`setusername ${username}`, (e) => {
                 let reply = e.data
@@ -166,6 +166,9 @@ let leaveMatch = () => {
 
 let setReady = () => {
     if(socket != 0) {
+        // adicionar as cartas (#cardlist)
+        // inpiração
+        // let name = document.querySelector("#matchInputField").value
         rpc("setready", (e) => {
             let reply = e.data.split(" ")
             let result = reply.shift()

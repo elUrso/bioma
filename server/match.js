@@ -61,7 +61,7 @@ let leaveMatch = (id, client, args) => {
         let name = playerInMatch[id]
         let match = matches[name]
         removePlayer(match, id)
-        if(match.playersID == 0) {
+        if(match.playersID.length == 0) {
             delete matches[name]
         }
         delete playerInMatch[id]
