@@ -4,17 +4,17 @@ let playerInMatch = {}
 let User = {}
 
 let inject = (tgt) => {
-    for(key in router) {
+    for (key in router) {
         tgt.router[key] = router[key]
     }
     User = tgt
 }
 
-let createMatch = (id, client, args)  => {
+let createMatch = (id, client, args) => {
     let desiredName = args[0]
-    if(id in playerInMatch) {
+    if (id in playerInMatch) {
         client.send("err already in match, please leave before joining or creating a new match")
-    } else if(desiredName in matches) {
+    } else if (desiredName in matches) {
         client.send("err match name already used")
     } else {
         let match = new Match()
@@ -28,7 +28,7 @@ router['creatematch'] = createMatch
 
 let getMatches = (id, client, args) => {
     let ret = "ok"
-    for(match in matches) {
+    for (match in matches) {
         ret = `${ret} ${match} ${matches[match].playersID.length}`
     }
     client.send(ret)
@@ -37,10 +37,10 @@ router['getmatches'] = getMatches
 
 let joinMatch = (id, client, args) => {
     let matchName = args[0]
-    if(matchName in matches) {
+    if (matchName in matches) {
         let match = matches[matchName]
-        if(match.playersID.length < match.capacity) {
-            if(!(id in playerInMatch)) {
+        if (match.playersID.length < match.capacity) {
+            if (!(id in playerInMatch)) {
                 match.playersID.push(id)
                 playerInMatch[id] = matchName
                 client.send("ok joined match")
@@ -57,11 +57,11 @@ let joinMatch = (id, client, args) => {
 router['joinmatch'] = joinMatch
 
 let leaveMatch = (id, client, args) => {
-    if(id in playerInMatch) {
+    if (id in playerInMatch) {
         let name = playerInMatch[id]
         let match = matches[name]
         removePlayer(match, id)
-        if(match.playersID.length == 0) {
+        if (match.playersID.length == 0) {
             delete matches[name]
         }
         delete playerInMatch[id]
@@ -73,13 +73,14 @@ let leaveMatch = (id, client, args) => {
 router['leavematch'] = leaveMatch
 
 let setReady = (id, client, args) => {
-    if(id in playerInMatch) {
+    if (id in playerInMatch) {
         let name = playerInMatch[id]
         let match = matches[name]
         match.playersReady.push(id)
         client.send("ok")
         console.log(match)
-        if(match.playersReady.length == match.capacity) {
+        match.userInfo[id] = { cards: args }
+        if (match.playersReady.length == match.capacity) {
             broadcast(match, "! matchbegin")
             match.ready = true
             match.turn = 0
@@ -96,6 +97,9 @@ let startMatch = (match) => {
     let id = match.playersID[match.turn % match.capacity]
     let client = User.getClient(id)
     let name = User.getName(id)
+    match.playersID.forEach(id => {
+        broadcast(match, `! gamelog Player ${name} cards are: ${match.userInfo[id].cards.join(' ')}`)
+    });
     client.send("! beginturn")
     broadcast(match, `! gamelog Player ${name} turn begun`)
 }
@@ -110,7 +114,7 @@ let nextTurn = (match) => {
 }
 
 let endTurn = (id, client, args) => {
-    if(id in playerInMatch) {
+    if (id in playerInMatch) {
         let name = playerInMatch[id]
         let match = matches[name]
         nextTurn(match)
@@ -148,6 +152,7 @@ class Match {
         this.capacity = 2
         this.ready = false
         this.turn = 0
+        this.userInfo = {}
     }
 }
 
