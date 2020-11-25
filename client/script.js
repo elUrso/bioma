@@ -225,3 +225,19 @@ let getNumber = () => {
         alert("Please, login before")
     }
 }
+
+// setup card detail
+
+let showDetail = (e) => {
+    document.querySelector("#carddetail").style.display = "block"
+    document.querySelector("#carddetail").innerHTML = e.toElement.innerHTML
+}
+
+let hideDetail = (e) => {
+    document.querySelector("#carddetail").style.display = "none"
+}
+
+document.querySelectorAll(".card").forEach( x => {
+    x.onmouseenter = showDetail
+    x.onmouseleave = hideDetail
+})
