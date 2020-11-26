@@ -241,3 +241,20 @@ document.querySelectorAll(".card").forEach( x => {
     x.onmouseenter = showDetail
     x.onmouseleave = hideDetail
 })
+
+// draw card
+
+let drawCard = (args) => {
+    let card = new Card(args[0])
+    document.querySelector("#playerhand").appendChild(card.view)
+}
+router['drawcard'] = drawCard
+
+class Card {
+    constructor(cardid) {
+        this.view = document.createElement("div")
+        this.view.classList.add("card")
+        this.view.onmouseenter = showDetail
+        this.view.onmouseleave = hideDetail
+    }
+}

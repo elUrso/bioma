@@ -79,7 +79,7 @@ let setReady = (id, client, args) => {
         match.playersReady.push(id)
         client.send("ok")
         console.log(match)
-        match.userInfo[id] = { cards: args }
+        match.userInfo[id] = new PlayerState(args)
         if (match.playersReady.length == match.capacity) {
             broadcast(match, "! matchbegin")
             match.ready = true
@@ -98,10 +98,17 @@ let startMatch = (match) => {
     let client = User.getClient(id)
     let name = User.getName(id)
     match.playersID.forEach(id => {
-        broadcast(match, `! gamelog Player ${name} cards are: ${match.userInfo[id].cards.join(' ')}`)
+        broadcast(match, `! gamelog Player ${User.getName(id)} cards are: ${match.userInfo[id].cards.join(' ')}`)
+        drawCards(match, id)
     });
     client.send("! beginturn")
     broadcast(match, `! gamelog Player ${name} turn begun`)
+}
+
+let drawCards = (match, id) => {
+    let cardid = Math.floor(Math.random() * 2)
+    match.userInfo[id].hand.push(cardid)
+    User.getClient(id).send(`! drawcard ${cardid}`)
 }
 
 let nextTurn = (match) => {
@@ -153,6 +160,13 @@ class Match {
         this.ready = false
         this.turn = 0
         this.userInfo = {}
+    }
+}
+
+class PlayerState {
+    constructor(cards) {
+        this.cards = cards
+        this.hand = []
     }
 }
 
