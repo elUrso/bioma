@@ -1,39 +1,152 @@
-#field {
+body {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-gap: 1rem;
-    width: min-content;
-}
-
-.fieldspace {
-    height: 6rem;
-    width: 6rem;
-    border: 0.5rem solid black;
-    background-color: blueviolet;
-}
-
-#playerhand {
+    margin: 0;
+    height: 100vh;
+    width: 100vw;
+    image-rendering: pixelated;
+    background-image: url("splash.png");
+    background-size: cover;
     display: flex;
-    overflow-x: scroll;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+    font-family: sans-serif;
+}
+
+img {
+    image-rendering: pixelated;
+}
+
+input {
+    font-size: 1rem;
+    padding: 0.0rem 0.5rem 0rem 0.5rem;
+    margin: 0;
+    border-radius: 0;
+}
+
+button {
+    font-size: 1rem;
+}
+
+button:hover {
+    cursor: pointer;
+}
+
+#loginView {
+    background-color: khaki;
+    padding: 2rem;
+    border: 0.2rem solid black;
+    display: flex;
+    flex-flow: column;
+    align-items: flex-start;
+
+}
+
+#sessionView {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+}
+
+#logoutIcon {
+    background-color: khaki;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    border: 0.2rem solid black;
+    padding: 0.2rem 0.4rem 0.2rem 0.4rem;
+}
+
+#logoutIcon:hover {
+    cursor: pointer;
+}
+
+#globalChatIcon {
+    background-color: khaki;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    border: 0.2rem solid black;
+    padding: 0.2rem 0.4rem 0.2rem 0.4rem;
+}
+
+#globalChatIcon:hover {
+    cursor: pointer;
+}
+
+#globalChat {
+    background-color: khaki;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    height: calc(100% - 0.4rem);
+    display: flex;
+    flex-flow: column;
+    border: 0.2rem solid black;
+    width: 18rem;
+}
+
+#globalChat>.header {
+    display: flex;
     flex-flow: row;
+    justify-content: space-between;
+    border-bottom: 0.2rem solid black;
+    min-height: 1.75rem;
 }
 
-.card {
-    background-color: yellow;
-    height: 6rem;
-    width: 4rem;
+#globalChat>.header>div {
+    padding: 0.2rem 0.4rem 0.2rem 0.4rem;
+    font-weight: bold;
 }
 
-.card:hover {
-    border: 0.5rem solid tomato;
+#globalMessages {
+    flex-grow: 1;
+    overflow-y: scroll;
 }
 
-#carddetail {
-    display: block;
-    height: 20rem;
-    width: 40rem;
-    background-color: turquoise;
-    position: fixed;
-    left: calc(100vw/2 - 20rem);
-    top: calc(100vh/2 - 20rem);
+#globalMessages>.message {
+    background-color: white;
+    margin: 0.2rem 0.1rem 0.2rem 0.1rem;
+    padding: 0.2rem 0.4rem 0.2rem 0.4rem;
+    border: 0.1rem solid black;
+}
+
+#globalMessages>.message>.user {
+    font-style: italic;
+    font-size: 0.8rem;
+}
+
+#globalChat>.messageInput {
+    border-top: 0.2rem solid black;
+    padding-bottom: 0.2rem;
+}
+
+.p1 {
+    font-size: 0.8rem;
+}
+.p2 {
+    font-size: 0.6rem;
+}
+.p3 {
+    font-size: 0.4rem;
+}
+.P1 {
+    font-size: 1.2rem;
+}
+.P2 {
+    font-size: 1.4rem;
+}
+.P3 {
+    font-size: 1.6rem;
+}
+.i {
+    font-style: italic;
+}
+.spacer {
+    height: 1rem;
+}
+.fe {
+    align-self: flex-end;
 }

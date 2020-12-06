@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Bioma</title>
+</head>
+<body>
+    <div id="setup">
+        <div>
+            <input type="text" placeholder="username" id="usernameInputField"/>
+            <input type="submit" value="login" onclick="connect()"/>
+        </div>
+        <div id="playersOnline">
+            <button onclick="getPlayers()"> refresh online players </button>
+            <ul>
+            </ul>
+        </div>
+        <div id="lobby">
+            <input type="text" placeholder="match name" id="matchInputField"/>
+            <input type="submit" value="create match" onclick="createMatch()"/>
+            <button onclick="getMatches()"> refresh match list </button>
+            <ul>
+    
+            </ul>
+        </div>
+        <div id="state">
+            <div id="match" style="display: none;">
+                <p></p>
+                <input type="text" placeholder="cartas" id="cardlist"/>
+                <button onclick="leaveMatch()">leave match</button>
+                <button onclick="setReady()">start match</button>
+            </div>
+            <div id="wait" style="display: none;">
+                Waiting for other players
+            </div>
+        </div>
+    </div>
+    <div id="game" qstyle="display: none;">
+        <div id="field">
+            <div id="f00" class="fieldspace"></div>
+            <div id="f01" class="fieldspace"></div>
+            <div id="f02" class="fieldspace"></div>
+            <div id="f10" class="fieldspace"></div>
+            <div id="f11" class="fieldspace"></div>
+            <div id="f12" class="fieldspace"></div>
+            <div id="f20" class="fieldspace"></div>
+            <div id="f21" class="fieldspace"></div>
+            <div id="f22" class="fieldspace"></div>
+        </div>
+        <div id="playerhand">
+        </div>
+        <div id="carddetail" style="display: none;">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum voluptas commodi, beatae ab perferendis ducimus? Eum, perferendis aspernatur quasi unde ad maiores facilis quidem odit fuga ipsa necessitatibus dolor sint.
+        </div>
+        <div id="commands" style="display: none;">
+            <button onclick="getNumber()"> gera numero </button>
+            <button onclick="endTurn()"> encerra turno </button>
+        </div>
+        <div id="log"></div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+#field {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 1rem;
+    width: min-content;
+}
+
+.fieldspace {
+    height: 6rem;
+    width: 6rem;
+    border: 0.5rem solid black;
+    background-color: blueviolet;
+}
+
+#playerhand {
+    display: flex;
+    overflow-x: scroll;
+    flex-flow: row;
+}
+
+.card {
+    background-color: yellow;
+    height: 6rem;
+    width: 4rem;
+}
+
+.card:hover {
+    border: 0.5rem solid tomato;
+}
+
+#carddetail {
+    display: block;
+    height: 20rem;
+    width: 40rem;
+    background-color: turquoise;
+    position: fixed;
+    left: calc(100vw/2 - 20rem);
+    top: calc(100vh/2 - 20rem);
+}

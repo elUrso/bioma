@@ -2,21 +2,10 @@ let socket = 0
 let hanlderQueue = []
 let router = {}
 
-// add enter detection on login
-
-document.querySelector("#usernameInputField").onkeydown = (e) => {
-    if(e.key === "Enter") connect();
-}
-
-document.querySelector("#messageField").onkeydown = (e) => {
-    if(e.key === "Enter") sendMessage();
-}
-
-let connect = () => {
-    let server = document.querySelector("#serverInputField").value
+let connect = (onopen) => {
     let username = document.querySelector("#usernameInputField").value
     if (socket == 0) {
-        socket = new WebSocket(`ws://${server}:7234`)
+        socket = new WebSocket("ws://localhost:7832")
         socket.onopen = (e) => {
             rpc(`setusername ${username}`, (e) => {
                 let reply = e.data
@@ -24,28 +13,18 @@ let connect = () => {
                     alert(reply)
                     socket.close()
                 } else {
-                    loginComplete()
+                    alert("login complete")
                 }
             })
         }
         socket.onmessage = (e) => { consume(e) }
         socket.onclose = (e) => {
-            resetUIState()
             console.log("Disconnected")
             socket = 0
-        }
-        socket.onerror = (e) => {
-            console.log("Could not connect")
-            alert("Não foi possível se conectar ao servidor")
         }
     } else {
         alert("a connection is already open")
     }
-}
-
-let loginComplete = () => {
-    document.querySelector("#loginView").style.display = "none"
-    document.querySelector("#sessionView").style.display = "flex"
 }
 
 let rpc = (msg, handler) => {
@@ -278,66 +257,4 @@ class Card {
         this.view.onmouseenter = showDetail
         this.view.onmouseleave = hideDetail
     }
-}
-
-// global chat
-
-let globalIsOpen = false
-
-let showChat = () => {
-    document.querySelector("#globalChatIcon").style.backgroundColor = "khaki"
-    document.querySelector("#globalChat").style.display = "flex"
-    let list = document.querySelector("#globalMessages")
-    list.scrollTop = list.scrollHeight
-    globalIsOpen = true
-}
-
-let hideChat = () => {
-    document.querySelector("#globalChat").style.display = "none"
-    globalIsOpen = false
-}
-
-let sendMessage = () => {
-    let field = document.querySelector("#messageField")
-    let message = field.value
-    rpc(`sendmessage ${message}`, ()=>{})
-    field.value = ""
-}
-
-let recvMessage = (args) => {
-    let name = args.shift()
-    let name_entry = document.createElement("div")
-    name_entry.classList.add("user")
-    name_entry.innerHTML = name
-
-    let message = args.join(" ")
-    let message_entry = document.createElement("div")
-    message_entry.classList.add("message")
-    message_entry.innerHTML = message
-
-    let entry = document.createElement("div")
-    entry.classList.add("message")
-    entry.appendChild(name_entry)
-    entry.appendChild(message_entry)
-
-    let list = document.querySelector("#globalMessages")
-    list.appendChild(entry)
-    list.scrollTop = list.scrollHeight
-
-    if(!globalIsOpen) document.querySelector("#globalChatIcon").style.backgroundColor = "red"
-}
-router["message"] = recvMessage
-
-// reset UI state
-
-let resetUIState  = () => {
-    document.querySelector("#loginView").style.display = "flex"
-    document.querySelector("#sessionView").style.display = "none"
-    document.querySelector("#globalMessages").innerHTML = ""
-}
-
-// logout
-
-let logout = () => {
-    socket.close()
 }
