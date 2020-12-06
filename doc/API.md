@@ -9,3 +9,5 @@ They are send from the server and are handled using the router mechanism on the
 client side.
 
 `! drawcard ${cardid}`
+
+`! message USER msg`
