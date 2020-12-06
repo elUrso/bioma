@@ -1,0 +1,4 @@
+🌳 Floresta
+⛰ Montanha
+🌊 Rio
+🏜 Deserto

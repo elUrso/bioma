@@ -11,3 +11,5 @@ client side.
 `! drawcard ${cardid}`
 
 `! message USER msg`
+
+`! update_matches` : update client side match list due to any change
