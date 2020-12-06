@@ -33,7 +33,6 @@ let attach = (client) => {
             delete states[id]
             console.log(`Client ${id} (${name}) disconnected`)
         }
-        
     })
 }
 
@@ -56,6 +55,7 @@ let setUsername = (id, client, args) => {
         getClientState(id).name = desirededUsername
         getClientState(id).valid = true
         client.send(`ok username set to ${desirededUsername}`)
+        broadcast(`message SYSTEM User <b>${desirededUsername}</b> connected`)
     }
 }
 router["setusername"] = setUsername
@@ -92,6 +92,14 @@ let getName = (id) => {
     return getClientState(id).name
 }
 
+let broadcast = (msg) => {
+    for(id in clients) {
+        if(id in states) {
+            getClient(id).send(`! ${msg}`)
+        }
+    }
+}
+
 class UserState {
     constructor() {
         this.alive = true
@@ -105,4 +113,5 @@ class UserState {
     module.exports.getName = getName
     module.exports.attach = attach
     module.exports.router = router
+    module.exports.broadcast = broadcast
 })()
