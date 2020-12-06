@@ -44,6 +44,8 @@ button:hover {
 
 #sessionView {
     position: relative;
+    display: flex;
+    flex-flow: row;
     width: 100%;
     height: 100%;
     left: 0;
@@ -123,6 +125,194 @@ button:hover {
     padding-bottom: 0.2rem;
 }
 
+#lobby {
+    display: flex;
+    flex-flow: row;
+    width: 100%;
+    height: 100%;
+}
+
+#userListColumn {
+    background-color: khaki;
+    height: calc(100% - 0.4rem);
+    display: flex;
+    flex-flow: column;
+    width: 16rem;
+    border: 0.2rem solid black;
+}
+
+#userListColumn>.header {
+    display: flex;
+    flex-flow: row;
+    justify-content: space-between;
+    border-bottom: 0.2rem solid black;
+    min-height: 1.75rem;
+}
+
+#userListColumn>.header>div {
+    padding: 0.2rem 0.4rem 0.2rem 0.4rem;
+    font-weight: bold;
+}
+
+#userListColumn>ul {
+    width: 100%;
+    overflow: auto;
+    list-style: none;
+}
+
+#userListColumn>li {
+    padding-left: 1rem;
+} 
+
+
+#matchListColumn {
+    background-color: khaki;
+    height: calc(100% - 0.4rem);
+    display: flex;
+    flex-flow: column;
+    flex-grow: 1;
+    border: 0.2rem solid black;
+    border-left: none;
+}
+
+#matchListColumn>.header {
+    display: flex;
+    flex-flow: row;
+    justify-content: space-between;
+    border-bottom: 0.2rem solid black;
+    min-height: 1.75rem;
+}
+
+#matchListColumn>.header>div {
+    padding: 0.2rem 0.4rem 0.2rem 0.4rem;
+    font-weight: bold;
+}
+
+#matchSetup {
+    background-color: blue;
+    display: flex;
+    flex-flow: column;
+    flex-grow: 1;
+}
+
+#matchSetup>.row {
+    display: flex;
+    flex-flow: row;
+    flex-grow: 1;
+    overflow: hidden;
+}
+
+#cardList {
+    background-color: khaki;
+    border: 0.2rem solid black;
+    border-right: none;
+    border-bottom: none;
+    width: calc(50% - 0.4rem);
+    display: flex;
+    flex-flow: column;
+    align-content: center;
+    overflow-y: scroll;
+}
+
+#cardlist .list {
+    display: flex;
+    flex-flow: column;
+}
+
+.cardView {
+    display: flex;
+    flex-flow: row;
+    min-height: 5rem;
+    margin: 0.5rem;
+    padding: 0.5rem;
+    border: 0.2rem solid black;
+    background-color: darkkhaki;
+    font-size: 1rem;
+}
+
+.cardView>img {
+    width: 4rem;
+    height: 4rem;
+    padding-right: 1rem;
+}
+
+.cardView .range::before {
+    content: "📏 ";
+}
+
+.cardView .power::before {
+    content: "💪 ";
+}
+
+.cardView .resistance::before {
+    content: "🥽 ";
+}
+
+.cardView .critical::before {
+    content: "⚡️ ";
+}
+
+.cardView .speed::before {
+    content: "🏃‍♂️ ";
+}
+
+.cardView .life::before {
+    content: "❤️ ";
+}
+
+.cardView .title {
+    display: flex;
+    flex-flow: row;
+    flex-wrap: wrap;
+}
+
+.cardView .specs {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+#deckList {
+    background-color: khaki;
+    border: 0.2rem solid black;
+    border-bottom: none;
+    width: calc(50% - 0.2rem);
+}
+
+#versusPanel {
+    background-color: khaki;
+    width: calc(100% - 0.4rem);
+    border: 0.2rem solid black;
+    min-height: 2.5rem;
+    display: flex;
+    flex-flow: row;
+    justify-content: center;
+}
+
+#versusPanel>.playerNameSpace {
+    min-width: 12rem;
+    background-color: white;
+    height: 1.5rem;
+    text-align: left;
+    margin-top: 0.1rem;
+    padding: 0.4rem 0.5rem 0rem 0.5rem;
+    border: 0.2rem solid black;
+}
+
+#versusPanel>.playerNameSpace.right {
+    text-align: right;
+}
+
+#versusPanel>.vs {
+    padding: 0.2rem 0.4rem 0.2rem 0.4rem;
+}
+
+
+@media (pointer:none), (pointer:coarse) {
+    #matchListColumn>.header, #userListColumn>.header, #globalChat>.header {
+        min-height: 2.2rem;
+    }
+}
+
 .p1 {
     font-size: 0.8rem;
 }
@@ -149,4 +339,8 @@ button:hover {
 }
 .fe {
     align-self: flex-end;
+}
+
+spacer {
+    flex-grow: 1;
 }

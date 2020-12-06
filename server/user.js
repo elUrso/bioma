@@ -28,9 +28,13 @@ let attach = (client) => {
     client.on('close', () => {
         let state = getClientState(id);
         if(state.valid) {
+            if(state.inmatch) {
+                state.dropMatch()
+            }
             let name = state.name
             delete names[name]
             delete states[id]
+            broadcast(`message SYSTEM User <b>${name}</b> disconnected`)
             console.log(`Client ${id} (${name}) disconnected`)
         }
     })
@@ -104,12 +108,14 @@ class UserState {
     constructor() {
         this.alive = true
         this.initizalized = false
+        this.inmatch = false
     }
 }
 
 (() => {
     module.exports.addClient = addClient
     module.exports.getClient = getClient
+    module.exports.getState = getClientState
     module.exports.getName = getName
     module.exports.attach = attach
     module.exports.router = router

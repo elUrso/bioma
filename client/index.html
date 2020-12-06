@@ -11,7 +11,7 @@
     <title>Natureza</title>
 </head>
 <body>
-    <div id="loginView">
+    <div id="loginView" style="display: none;">
         <div class="P2">Natureza</div>
         <div class="p2 i">client 0.0.1</div>
         <div class="spacer"></div>
@@ -23,7 +23,128 @@
         <div class="spacer"></div>
         <button onclick="connect()" class="fe">Iniciar Sessão</button>
     </div>
-    <div id="sessionView" style="display: none;">
+    <div id="sessionView">
+        <div id="lobby" style="display: none;">
+            <div id="userListColumn">
+                <div class="header">
+                    <div class="P1">Usuários Online</div>
+                    <!--<button onclick="getPlayers()">🥤</button>-->
+                </div>
+                <ul id="usersList">
+                </ul>
+            </div>
+            <div id="matchListColumn">
+                <div class="header">
+                    <div class="P1">Partidas</div>
+                    <!--<button onclick="getMatches()">🥤</button>-->
+                    <spacer></spacer>
+                    <input type="text" name="" id="matchInputField" placeholder="Nome da nova partida">
+                    <button onclick="createMatch()">Criar</button>
+                </div>
+                <ul id="matchList">
+                </ul>
+            </div>
+        </div>
+        <div id="matchSetup">
+            <div class="row">
+                <div id="cardList">
+                    <div class="list">
+                        <div class="cardView">
+                            <img src="res/blank.png" alt="Card Art">
+                            <div class="detail">
+                                <div class="title">
+                                    <div class="name">Sapo Mega Ultra Blaster</div>
+                                    <div class="kind">(Girino Lv. 2)</div>
+                                    <div class="type">[Floresta]</div>
+                                </div>
+                                <div class="specs">
+                                    <div class="range">2</div>
+                                    <div class="power">20</div>
+                                    <div class="critical">5%</div>
+                                    <div class="life">10</div>
+                                    <div class="resistance">10</div>
+                                    <div class="speed">10</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="cardView">
+                            <img src="res/blank.png" alt="Card Art">
+                            <div class="detail">
+                                <div class="title">
+                                    <div class="name">Sapo</div>
+                                    <div class="kind">(Girino Lv. 2)</div>
+                                    <div class="type">[Floresta]</div>
+                                </div>
+                                <div class="specs">
+                                    <div class="range">2</div>
+                                    <div class="power">20</div>
+                                    <div class="critical">5%</div>
+                                    <div class="life">10</div>
+                                    <div class="resistance">10</div>
+                                    <div class="speed">10</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="cardView">
+                            <img src="res/blank.png" alt="Card Art">
+                            <div class="detail">
+                                <div class="title">
+                                    <div class="name">Sapo</div>
+                                    <div class="kind">(Girino Lv. 2)</div>
+                                    <div class="type">[Floresta]</div>
+                                </div>
+                                <div class="specs">
+                                    <div class="range">2</div>
+                                    <div class="power">20</div>
+                                    <div class="critical">5%</div>
+                                    <div class="life">10</div>
+                                    <div class="resistance">10</div>
+                                    <div class="speed">10</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="cardView">
+                            <img src="res/blank.png" alt="Card Art">
+                            <div class="detail">
+                                <div class="title">
+                                    <div class="name">Sapo</div>
+                                    <div class="kind">(Girino Lv. 2)</div>
+                                    <div class="type">[Floresta]</div>
+                                </div>
+                                <div class="specs">
+                                    <div class="range">2</div>
+                                    <div class="power">20</div>
+                                    <div class="critical">5%</div>
+                                    <div class="life">10</div>
+                                    <div class="resistance">10</div>
+                                    <div class="speed">10</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="cardView">
+                            <img src="res/blank.png" alt="Card Art">
+                            <div class="detail">
+                                <div class="title">
+                                    <div class="name">Crescimento Acelerado</div>
+                                    <div class="kind">(Efeito)</div>
+                                    <div class="type"></div>
+                                </div>
+                                <div>
+                                    A criatura ganha mais +1 de alcance
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                <div id="deckList">RIGHT</div>
+            </div>
+            <div id="versusPanel">
+                <div class="playerNameSpace right">Waiting for player...</div>
+                <div class="vs P3">🆚</div>
+                <div class="playerNameSpace">Waiting for player...</div>
+            </div>
+        </div>
         <div id="logoutIcon" class="P3" onclick="logout()">
             👋
         </div>

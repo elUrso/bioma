@@ -1,6 +1,7 @@
 let socket = 0
 let hanlderQueue = []
 let router = {}
+let messageSound = new Audio('audio/clearly-602.mp3')
 
 // add enter detection on login
 
@@ -11,6 +12,10 @@ document.querySelector("#usernameInputField").onkeydown = (e) => {
 document.querySelector("#messageField").onkeydown = (e) => {
     if(e.key === "Enter") sendMessage();
 }
+
+// update server name to current location
+
+document.querySelector("#serverInputField").value = window.location.hostname
 
 let connect = () => {
     let server = document.querySelector("#serverInputField").value
@@ -44,8 +49,24 @@ let connect = () => {
 }
 
 let loginComplete = () => {
+    updateMatches()
+    showLobby()
+}
+
+let showLobby = () => {
     document.querySelector("#loginView").style.display = "none"
     document.querySelector("#sessionView").style.display = "flex"
+    document.querySelector("#lobby").style.display = "flex"
+    document.querySelector("#matchSetup").style.display = "none"
+    document.querySelector("#logoutIcon").onclick = logout
+}
+
+let showMatchSetup = () => {
+    document.querySelector("#loginView").style.display = "none"
+    document.querySelector("#sessionView").style.display = "flex"
+    document.querySelector("#lobby").style.display = "none"
+    document.querySelector("#matchSetup").style.display = "flex"
+    document.querySelector("#logoutIcon").onclick = leaveMatch
 }
 
 let rpc = (msg, handler) => {
@@ -77,12 +98,12 @@ let dispatch = (args) => {
 
 let getPlayers = () => {
     if (socket != 0) {
-        let ul = document.querySelector("#playersOnline>ul")
+        let ul = document.querySelector("#usersList")
         rpc("getplayers", (e) => {
             let players = e.data.split(" ")
             players.shift()
             players.sort()
-            ul.innerHTML = renderPlayerList(players)
+            ul.innerHTML = renderPlayerList(players.sort())
         })
     } else {
         alert("Please, login before")
@@ -105,11 +126,7 @@ let createMatch = () => {
             let result = reply.shift()
             if (result == "err") alert(e.data)
             else {
-                let match = document.querySelector("#match")
-                let text = document.querySelector("#match>p")
-                text.innerHTML = name
-                // show match UI
-                match.style.display = "block"
+                showMatchSetup()
             }
         })
     } else {
@@ -119,7 +136,7 @@ let createMatch = () => {
 
 let getMatches = () => {
     if (socket != 0) {
-        let ul = document.querySelector("#lobby>ul")
+        let ul = document.querySelector("#matchList")
         rpc(`getmatches`, (e) => {
             let matches = e.data.split(" ")
             matches.shift()
@@ -134,7 +151,11 @@ let getMatches = () => {
 let renderMatchList = (matches) => {
     let ret = ""
     pair(matches).forEach((x) => {
-        ret = `${ret}<li>${x[0]} (${x[1]}/2) <a href="#" onclick="joinMatch('${x[0]}')">join</a></li>`
+        if(x[1] == "2") {
+            ret = `${ret}<li>${x[0]} (${x[1]}/2)`
+        } else {
+            ret = `${ret}<li>${x[0]} (${x[1]}/2) <a href="#" onclick="joinMatch('${x[0]}')">join</a></li>`
+        }
     })
     return ret
 }
@@ -156,11 +177,7 @@ let joinMatch = (match) => {
             let result = reply.shift()
             if (result == "err") alert(e.data)
             else {
-                let matchDiv = document.querySelector("#match")
-                let text = document.querySelector("#match>p")
-                text.innerHTML = match
-                // show match UI
-                matchDiv.style.display = "block"
+                showMatchSetup()
             }
         })
     } else {
@@ -175,9 +192,7 @@ let leaveMatch = () => {
             let result = reply.shift()
             if (result == "err") alert(e.data)
             else {
-                let matchDiv = document.querySelector("#match")
-                // hide match UI
-                matchDiv.style.display = "none"
+                showLobby()
             }
         })
     } else {
@@ -310,6 +325,10 @@ let recvMessage = (args) => {
     name_entry.classList.add("user")
     name_entry.innerHTML = name
 
+    if(name == "SYSTEM" && args[0] === "User") {
+        getPlayers()
+    }
+
     let message = args.join(" ")
     let message_entry = document.createElement("div")
     message_entry.classList.add("message")
@@ -324,7 +343,10 @@ let recvMessage = (args) => {
     list.appendChild(entry)
     list.scrollTop = list.scrollHeight
 
-    if(!globalIsOpen) document.querySelector("#globalChatIcon").style.backgroundColor = "red"
+    if(!globalIsOpen) {
+        document.querySelector("#globalChatIcon").style.backgroundColor = "red"
+        messageSound.play()
+    }
 }
 router["message"] = recvMessage
 
@@ -334,6 +356,7 @@ let resetUIState  = () => {
     document.querySelector("#loginView").style.display = "flex"
     document.querySelector("#sessionView").style.display = "none"
     document.querySelector("#globalMessages").innerHTML = ""
+    document.querySelector("#logoutIcon").onclick = logout
 }
 
 // logout
@@ -341,3 +364,9 @@ let resetUIState  = () => {
 let logout = () => {
     socket.close()
 }
+
+// handle match update
+let updateMatches = (args) => {
+    getMatches()
+}
+router["update_matches"] = updateMatches

@@ -9,6 +9,10 @@ let inject = (tgt) => {
     }
     User = tgt
 }
+ 
+let sendUpdateMatches = () => {
+    User.broadcast("update_matches")
+}
 
 let createMatch = (id, client, args) => {
     let desiredName = args[0]
@@ -21,10 +25,27 @@ let createMatch = (id, client, args) => {
         match.playersID.push(id)
         matches[desiredName] = match
         playerInMatch[id] = desiredName
+        registerPlayer(id, desiredName)
         client.send(`ok joined match ${desiredName}`)
+        sendUpdateMatches()
     }
 }
 router['creatematch'] = createMatch
+
+let registerPlayer = (playerID, matchName) => {
+    let state = User.getState(playerID)
+    let match = matches[matchName]
+    state.inmatch = true
+    state.dropMatch = () => {
+        console.log(`Removing player ${User.getName(playerID)} from match ${matchName}`)
+        removePlayer(match, playerID)
+        sendUpdateMatches()
+        if (match.playersID.length == 0) {
+            delete matches[matchName]
+        }
+        delete playerInMatch[playerID]
+    }
+}
 
 let getMatches = (id, client, args) => {
     let ret = "ok"
@@ -43,7 +64,9 @@ let joinMatch = (id, client, args) => {
             if (!(id in playerInMatch)) {
                 match.playersID.push(id)
                 playerInMatch[id] = matchName
+                registerPlayer(id, matchName)
                 client.send("ok joined match")
+                sendUpdateMatches()
             } else {
                 client.send("err already in a match")
             }
@@ -65,7 +88,9 @@ let leaveMatch = (id, client, args) => {
             delete matches[name]
         }
         delete playerInMatch[id]
+        User.getState(id).inmatch = false
         client.send("ok")
+        sendUpdateMatches()
     } else {
         client.send("err not in a match")
     }
@@ -149,7 +174,7 @@ let broadcast = (match, msg) => {
 }
 
 let removePlayer = (match, id) => {
-    match.playersID.splice(match.playersID.indexOf(id))
+    match.playersID = match.playersID.filter(x => x !== id)
 }
 
 class Match {
