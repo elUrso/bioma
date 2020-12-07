@@ -6,12 +6,24 @@ let messageSound = new Audio('audio/clearly-602.mp3')
 // add enter detection on login
 
 document.querySelector("#usernameInputField").onkeydown = (e) => {
-    if(e.key === "Enter") connect();
+    if(e.key === "Enter") connect()
 }
 
 document.querySelector("#messageField").onkeydown = (e) => {
-    if(e.key === "Enter") sendMessage();
+    if(e.key === "Enter") sendMessage()
 }
+
+// pull cards
+
+let fetchCards = async () => {
+    let content = await fetch("cards.json")
+    let res = await content.json()
+    cards = res
+}
+
+fetchCards()
+
+let cards = 0
 
 // update server name to current location
 
@@ -67,6 +79,131 @@ let showMatchSetup = () => {
     document.querySelector("#lobby").style.display = "none"
     document.querySelector("#matchSetup").style.display = "flex"
     document.querySelector("#logoutIcon").onclick = leaveMatch
+    updateCardList()
+    resetDeck()
+}
+
+let updateCardList = () => {
+    let list = document.querySelector("#cardList .list")
+    list.innerHTML = ""
+    renderCards(cards, list)
+}
+
+let renderCards = (cards, list) => {
+    for(index in cards) {
+        list.appendChild(renderCard(cards[index], index))
+    }
+}
+
+let creatureDiv = document.createElement("div")
+creatureDiv.classList.add("cardView")
+creatureDiv.innerHTML = '<img src="res/blank.png" alt="Card Art"><div class="detail"><div class="title"><div class="name"></div><div class="kind"></div><div class="type"></div></div><div class="specs"><div class="range"></div><div class="power"></div><div class="critical"></div><div class="life"></div><div class="resistance"></div><div class="speed"></div></div></div>'
+
+let effectDiv = document.createElement("div")
+effectDiv.classList.add("cardView")
+effectDiv.innerHTML = `<img src="res/skeleton-x4.gif" alt="Card Art"><div class="detail"><div class="title"><div class="name"></div><div class="kind"></div><div class="type"></div></div><div class="text"></div></div>`
+
+let renderCard = (card, index) => {
+    let div
+    if(card.tipo == "criatura") {
+        div = creatureDiv.cloneNode(true)
+        div.querySelector(".name").innerHTML = card.nome
+        if(card.nivel == 1) {
+            div.querySelector(".kind").innerHTML = "(Lv. 1)"
+        } else {
+            div.querySelector(".kind").innerHTML = `(${cards[card.base].nome} Lv. ${cards.nivel})`
+        }
+        div.querySelector(".type").innerHTML = `[${card.terreno}]`
+
+        div.querySelector(".range").innerHTML = `${card.alcance}`
+        div.querySelector(".power").innerHTML = `${card.poder}`
+        div.querySelector(".critical").innerHTML = `${Math.floor(card.critico * 100)}%`
+        div.querySelector(".life").innerHTML = `${card.life}`
+        div.querySelector(".resistance").innerHTML = `${card.resistencia}`
+        div.querySelector(".speed").innerHTML = `${card.velocidade}`
+        
+    } else {
+        div = effectDiv.cloneNode(true)
+        div.querySelector(".name").innerHTML = card.nome
+        div.querySelector(".kind").innerHTML = "(Efeito)"
+        div.querySelector(".text").innerHTML = card.desc
+    }
+
+    div.onclick = () => {
+        addToDeck(index)
+    }
+
+    return div
+}
+
+// Deck related stuff
+
+let deck = []
+
+let resetDeck = () => {
+    deck = []
+    renderDeck()
+}
+
+let renderDeck = () => {
+    let check = document.querySelector("#deckList button")
+    check.innerHTML = `Pronto (${deck.length}/26 cards)`
+
+    if(deck.length == 26)
+        check.disabled = false
+    else
+        check.disabled = true
+
+    let list = document.querySelector("#deckList ul")
+    list.innerHTML = ""
+    for(i in deck) {
+        let j = deck[i]
+        let li = document.createElement("li")
+        li.innerHTML = `${cardName(j)} <a href="#" onclick="removeFromDeck(${i})">remove</a>`
+        list.appendChild(li)
+    }
+}
+
+let removeFromDeck = (i) => {
+    deck.splice(i, 1)
+    renderDeck()
+}
+
+let cardName = (i) => {
+    let card = cards[i]
+    if(card.tipo == "criatura") {
+        if(card.nivel == 1)
+            return `${card.nome} (Lv. 1) [${card.terreno}]`
+        else
+            return `${card.nome} (${cards[card.base].nome} Lv. ${cards.nivel}) [${card.terreno}]`         
+    } else {
+        return `${card.nome} (Efeito)`
+    }
+}
+
+let addToDeck = (index) => {
+    let count = 0
+    for(i of deck) if(i == index) count += 1
+    if(count > 3 || deck.length == 26) {
+        alert("Você já tem 4 cópias desta carta no seu deck")
+    } else {
+        deck.push(index)
+        renderDeck()
+    }
+}
+
+let storeDeck = () => {
+    localStorage.setItem("deck", JSON.stringify(deck))
+    alert("Deck salvo no navegador")
+}
+
+let restoreDeck = () => {
+    let ret = localStorage.getItem("deck")
+    if(ret == null) alert("Não há decks salvos")
+    else {
+        deck = JSON.parse(ret)
+        renderDeck()
+    }
 }
 
 let rpc = (msg, handler) => {

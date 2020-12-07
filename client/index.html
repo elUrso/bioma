@@ -11,7 +11,7 @@
     <title>Natureza</title>
 </head>
 <body>
-    <div id="loginView" style="display: none;">
+    <div id="loginView">
         <div class="P2">Natureza</div>
         <div class="p2 i">client 0.0.1</div>
         <div class="spacer"></div>
@@ -23,8 +23,8 @@
         <div class="spacer"></div>
         <button onclick="connect()" class="fe">Iniciar Sessão</button>
     </div>
-    <div id="sessionView">
-        <div id="lobby" style="display: none;">
+    <div id="sessionView" style="display: none;">
+        <div id="lobby">
             <div id="userListColumn">
                 <div class="header">
                     <div class="P1">Usuários Online</div>
@@ -45,7 +45,7 @@
                 </ul>
             </div>
         </div>
-        <div id="matchSetup">
+        <div id="matchSetup" style="display: none;">
             <div class="row">
                 <div id="cardList">
                     <div class="list">
@@ -137,7 +137,30 @@
                     </div>
                     
                 </div>
-                <div id="deckList">RIGHT</div>
+                <div id="deckList">
+                    <button disabled>Pronto (17/26 cards)</button>
+                    <ul>
+                        <li>Sapo (Girino Lv. 2) [Floresta] <a onclick="alert(1)" href="#">remover</a></li>
+                        <li>Sapo (Girino Lv. 2) [Floresta] <a onclick="alert(1)" href="#">remover</a></li>
+                        <li>Sapo (Girino Lv. 2) [Floresta] <a onclick="alert(1)" href="#">remover</a></li>
+                        <li>Sapo (Girino Lv. 2) [Floresta] <a onclick="alert(1)" href="#">remover</a></li>
+                        <li>Sapo (Girino Lv. 2) [Floresta] <a onclick="alert(1)" href="#">remover</a></li>
+                        <li>Sapo (Girino Lv. 2) [Floresta] <a onclick="alert(1)" href="#">remover</a></li>
+                        <li>Sapo (Girino Lv. 2) [Floresta] <a onclick="alert(1)" href="#">remover</a></li>
+                        <li>Sapo (Girino Lv. 2) [Floresta] <a onclick="alert(1)" href="#">remover</a></li>
+                        <li>Sapo (Girino Lv. 2) [Floresta] <a onclick="alert(1)" href="#">remover</a></li>
+                        <li>Sapo (Girino Lv. 2) [Floresta] <a onclick="alert(1)" href="#">remover</a></li>
+                        <li>Sapo (Girino Lv. 2) [Floresta] <a onclick="alert(1)" href="#">remover</a></li>
+                        <li>Sapo (Girino Lv. 2) [Floresta] <a onclick="alert(1)" href="#">remover</a></li>
+                        <li>Sapo (Girino Lv. 2) [Floresta] <a onclick="alert(1)" href="#">remover</a></li>
+                        <li>Sapo (Girino Lv. 2) [Floresta] <a onclick="alert(1)" href="#">remover</a></li>
+                        <li>Sapo (Girino Lv. 2) [Floresta] <a onclick="alert(1)" href="#">remover</a></li>
+                        <li>Sapo (Girino Lv. 2) [Floresta] <a onclick="alert(1)" href="#">remover</a></li>
+                        <li>Sapo (Girino Lv. 2) [Floresta] <a onclick="alert(1)" href="#">remover</a></li>
+                    </ul>
+                    <button onclick="storeDeck()">Salvar deck</button>
+                    <button onclick="restoreDeck()">Carregar deck</button>
+                </div>
             </div>
             <div id="versusPanel">
                 <div class="playerNameSpace right">Waiting for player...</div>
@@ -146,7 +169,7 @@
             </div>
         </div>
         <div id="logoutIcon" class="P3" onclick="logout()">
-            👋
+            🔙
         </div>
         <div id="globalChatIcon" class="P3" onclick="showChat()">
             💬

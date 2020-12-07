@@ -1,216 +1,47 @@
 {
-    "0": {
-        "tipo": "terreno",
-        "nome": "deserto"
-    },
     "1": {
-        "tipo": "terreno",
-        "nome": "praia"
+        "tipo": "criatura",
+        "nome": "Girino",
+        "nivel": 1,
+        "terreno": "Rio",
+        "alcance": 1,
+        "poder": 10,
+        "critico": 0.01,
+        "life": 5,
+        "resistencia": 2,
+        "velocidade": 5
     },
     "2": {
-        "tipo": "terreno",
-        "nome": "caverna",
-        "habilidades": [
-            "perdido_na_gruta"
-        ]
+        "tipo": "criatura",
+        "nome": "Sapo",
+        "nivel": 2,
+        "base": "1",
+        "terreno": "Floresta",
+        "alcance": 2,
+        "poder": 20,
+        "critico": 0.05,
+        "life": 10,
+        "resistencia": 10,
+        "velocidade": 10
     },
     "3": {
-        "tipo": "terreno",
-        "nome": "savana"
+        "tipo": "criatura",
+        "nome": "Sapão",
+        "nivel": 3,
+        "base": "2",
+        "terreno": "Floresta",
+        "alcance": 3,
+        "poder": 40,
+        "critico": 0.2,
+        "life": 30,
+        "resistencia": 20,
+        "velocidade": 15
     },
     "4": {
-        "tipo": "terreno",
-        "nome": "floresta"
-    },
-    "5": {
-        "tipo": "terreno",
-        "nome": "rio"
-    },
-    "6": {
-        "tipo": "terreno",
-        "nome": "montanha"
-    },
-    "7": {
-        "tipo": "criatura",
-        "nome": "canguru",
-        "poder": 3,
-        "terreno": "savana"
-    },
-    "8": {
-        "tipo": "criatura",
-        "nome": "peixe",
-        "poder": 2,
-        "terreno": "rio"
-    },
-    "9": {
-        "tipo": "criatura",
-        "nome": "coelho",
-        "poder": 1,
-        "terreno": "floresta",
-        "habilidades": [
-            "procriar",
-            "saque_ao_jogar"
-        ]
-    },
-    "10": {
-        "tipo": "criatura",
-        "nome": "girino",
-        "poder": 2,
-        "terreno": "rio"
-    },
-    "11": {
-        "tipo": "criatura",
-        "nome": "cobra",
-        "poder": 2,
-        "terreno": "deserto",
-        "habilidades": [
-            "veneno"
-        ]
-    },
-    "12": {
-        "tipo": "criatura",
-        "nome": "aranha",
-        "poder": 1,
-        "terreno": "floresta",
-        "habilidades": [
-            "veneno"
-        ]
-    },
-    "13": {
-        "tipo": "criatura",
-        "nome": "aranha",
-        "poder": 1,
-        "terreno": "floresta",
-        "habilidades": [
-            "veneno"
-        ]
-    },
-    "14": {
-        "tipo": "criatura",
-        "nome": "morcego",
-        "poder": 3,
-        "terreno": "floresta",
-        "habilidades": [
-            "manjador_de_gruta"
-        ]
-    },
-    "15": {
-        "tipo": "criatura",
-        "nome": "ovo de águia",
-        "poder": 1,
-        "terreno": "montanha",
-        "habilidades": [
-            "evoluir_aguia"
-        ]
-    },
-    "16": {
-        "tipo": "evolucao",
-        "base": "ovo de águia",
-        "token": true,
-        "nome": "águia",
-        "poder": 4,
-        "terreno": "montanha"
-    },
-    "17": {
-        "tipo": "criatura",
-        "nome": "cactus",
-        "poder": 2,
-        "defesa": 2,
-        "terreno": "deserto",
-        "habilidades": [
-            "enraizado"
-        ]
-    },
-    "18": {
-        "tipo": "criatura",
-        "nome": "lagosta",
-        "poder": 1,
-        "terreno": "praia",
-        "habilidades": [
-            "evoluir_ao_jogar"
-        ]
-    },
-    "19": {
-        "tipo": "evolucao",
-        "base": "lagosta",
-        "nome": "lagosta rei",
-        "poder": 5,
-        "terreno": "praia"
-    },
-    "20": {
-        "tipo": "evolucao",
-        "base": "canguru",
-        "nome": "canguru mãe",
-        "poder": 5,
-        "terreno": "savana",
-        "habilidades": [
-            "mae_solteira"
-        ]
-    },
-    "21": {
-        "tipo": "evolucao",
-        "base": "cobra",
-        "nome": "naja",
-        "poder": 4,
-        "terreno": "deserto",
-        "habilidades": [
-            "veneno"
-        ]
-    },
-    "22": {
-        "tipo": "evolucao",
-        "base": "girino",
-        "nome": "sapo",
-        "poder": 4,
-        "terreno": "floresta",
-        "habilidades": [
-            "saque_ao_jogar"
-        ]
-    },
-    "23": {
         "tipo": "efeito",
-        "nome": "voar",
+        "nome": "Crescimento Acelerado",
         "alvo": "criatura",
-        "tempo": "continuo",
-        "efeito": "move2",
-        "restrito": "águia"
-    },
-    "24": {
-        "tipo": "efeito",
-        "nome": "cardume",
-        "alvo": "terreno",
-        "tempo": "continuo",
-        "efeito": "cardume"
-    },
-    "25": {
-        "tipo": "efeito",
-        "nome": "gemeos",
-        "alvo": "criatura",
-        "tempo": "instantaneo",
-        "efeito": "gemeos",
-        "restrito": "coelho",
-        "gera": 2
-    },
-    "26": {
-        "tipo": "efeito",
-        "nome": "chuva",
-        "alvo": "criatura",
-        "tempo": "instantaneo",
-        "efeito": "regenera",
-        "restrito": "cactus"
-    },
-    "27": {
-        "tipo": "efeito",
-        "nome": "teia",
-        "alvo": "terreno",
-        "tempo": "continuo",
-        "efeito": "teia"
-    },
-    "28": {
-        "tipo": "efeito",
-        "nome": "sonar",
-        "alvo": "terreno",
-        "tempo": "continuo",
-        "efeito": "sonar"
+        "desc": "A criatura ganha mais +1 de alcance",
+        "command": "cont incvel 1"
     }
 }
