@@ -230,6 +230,10 @@ button:hover {
     font-size: 1rem;
 }
 
+.cardView:active {
+    background-color: khaki;
+}
+
 .cardView>img {
     width: 4rem;
     height: 4rem;
@@ -305,6 +309,151 @@ button:hover {
 
 #versusPanel>.vs {
     padding: 0.2rem 0.4rem 0.2rem 0.4rem;
+}
+
+#matchView {
+    position: relative;
+    display: flex;
+    flex-flow: row;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+}
+
+#turnView {
+    display: grid;
+    grid-template-columns: 2fr 5fr;
+    grid-template-rows: 2fr 1fr;
+    grid-template-areas: "action field"
+                         "action hand";
+    width: 100%;
+}
+
+#actionView {
+    background-color: khaki;
+    background-image: url("res/cobble.jpg");
+    grid-area: action;
+    border: 0.2rem solid black;
+}
+
+#fieldView {
+    background-color: khaki;
+    background-image: url("res/table.jpg");
+    background-size: cover;
+    grid-area: field;
+    border: 0.2rem solid black;
+    border-left: none;
+    display: flex;
+    flex-flow: row;
+    justify-content: center;
+    align-items: center;
+}
+
+#halfField {
+    display: grid;
+    grid-template-columns: 20vh 20vh 20vh 20vh;
+    grid-template-rows: 20vh 20vh;
+    gap: 2vh
+}
+
+#halfField .field {
+    background-color: khaki;
+    background-image: url("res/universe.jpg");
+    border: 0.5vh solid black;
+    display: flex;
+    flex-flow: row;
+    justify-content: center;
+    align-items: center;
+}
+
+#halfField .field.lv1 {
+    border: 0.5vh solid sienna;
+}
+
+#halfField .field.lv2 {
+    border: 0.5vh solid silver;
+}
+
+#halfField .field.lv3 {
+    border: 0.5vh solid gold;
+}
+
+#halfField .field.florest {
+    background-image: url("res/florest.jpg");
+}
+
+#halfField .field.mountain {
+    background-image: url("res/mountain.jpg");
+}
+
+#halfField .field.river {
+    background-image: url("res/river.jpg");
+}
+
+#halfField .field.desert {
+    background-image: url("res/desert.jpg");
+}
+
+.field .creature img {
+    height: 10vh;
+    width: 10vh;
+}
+
+.field .creature .life {
+    font-weight: bold;
+    color: white;
+    width: fit-content;
+    align-self: center;
+}
+
+.field .creature .life::before {
+    content: "❤️";
+}
+
+#handView {
+    background-color: khaki;
+    background-image: url("res/hand.jpg");
+    grid-area: hand;
+    border: 0.2rem solid black;
+    border-left: none;
+    border-top: none;
+    display: flex;
+    flex-flow: row;
+    overflow-x: scroll;
+    overflow-y: hidden;
+}
+
+.cardOnHand {
+    margin: 0.5rem;
+    min-width: 20vh;
+    border-radius: 1.4vh;
+    border: 1vh solid black;
+    height: 28vh;
+    display: flex;
+    flex-flow: column;
+    justify-content: space-around;
+    align-items: center;
+    background-color: white;
+    background-image: url("res/cardBack.jpg");
+}
+
+.cardOnHand .name {
+    border: 0.1rem solid black;
+    width: 16vh;
+    font-size: 2vh;
+    height: 4vh;
+    background-color: #ffffffA7;
+}
+
+.cardOnHand .name sup {
+    font-size: 1vh;
+}
+
+.cardOnHand img {
+    border: 0.1rem solid black;
+    width: 16vh;
+    height: 16vh;
 }
 
 

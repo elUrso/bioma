@@ -105,7 +105,7 @@ let setReady = (id, client, args) => {
         client.send("ok")
         console.log(match)
         match.userInfo[id] = new PlayerState(args)
-        if (match.playersReady.length == match.capacity) {
+        if (match.playersReady.length === match.capacity) {
             broadcast(match, "! matchbegin")
             match.ready = true
             match.turn = 0
@@ -118,7 +118,7 @@ let setReady = (id, client, args) => {
 router['setready'] = setReady
 
 let startMatch = (match) => {
-    // get first player to begin
+    /*
     let id = match.playersID[match.turn % match.capacity]
     let client = User.getClient(id)
     let name = User.getName(id)
@@ -128,6 +128,7 @@ let startMatch = (match) => {
     });
     client.send("! beginturn")
     broadcast(match, `! gamelog Player ${name} turn begun`)
+    */
 }
 
 let drawCards = (match, id) => {

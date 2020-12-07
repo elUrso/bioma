@@ -11,4 +11,5 @@ O sistema de teste pode ser acessado pelo link: silva.moe:7233
 Você precisa de 2 terminais, python3 e nodeJS.
 
 Em um termminal é so rodar `npm start`
-E em outro dar um cd em `client` e depois rodar `python3 -m http.server 7233`.
+E em outro dar um cd em `client` e depois rodar `python3 -m http.server 7233`
+ou `live-server --port=7233` para acelerar o desenvolvimento.

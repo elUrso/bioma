@@ -2,6 +2,10 @@ let socket = 0
 let hanlderQueue = []
 let router = {}
 let messageSound = new Audio('audio/clearly-602.mp3')
+let matchStartSound = new Audio('audio/confirm_style_5_echo_004.wav')
+let Gamestate = {}
+Gamestate.inmatch = false
+let Username = ""
 
 // add enter detection on login
 
@@ -12,6 +16,22 @@ document.querySelector("#usernameInputField").onkeydown = (e) => {
 document.querySelector("#messageField").onkeydown = (e) => {
     if(e.key === "Enter") sendMessage()
 }
+
+// retrieve username
+
+(() => {
+    let name = localStorage.getItem("Username")
+    if(name != null)
+        document.querySelector("#usernameInputField").value = name
+})();
+
+
+// dev helper
+(() => {
+    document.querySelector("#loginView").style.display = "none"
+    document.querySelector("#sessionView").style.display = "none"
+    document.querySelector("#matchView").style.display = "flex"
+});
 
 // pull cards
 
@@ -31,7 +51,11 @@ document.querySelector("#serverInputField").value = window.location.hostname
 
 let connect = () => {
     let server = document.querySelector("#serverInputField").value
-    let username = document.querySelector("#usernameInputField").value
+    let username = document.querySelector("#usernameInputField").value.replace(" ", "_")
+    if(username === "") {
+        alert("Insira um nome de usuário")
+        return
+    }
     if (socket == 0) {
         socket = new WebSocket(`ws://${server}:7234`)
         socket.onopen = (e) => {
@@ -41,6 +65,9 @@ let connect = () => {
                     alert(reply)
                     socket.close()
                 } else {
+                    let slices = reply.split(" ")
+                    Username = slices[4]
+                    localStorage.setItem("Username", Username)
                     loginComplete()
                 }
             })
@@ -70,6 +97,7 @@ let showLobby = () => {
     document.querySelector("#sessionView").style.display = "flex"
     document.querySelector("#lobby").style.display = "flex"
     document.querySelector("#matchSetup").style.display = "none"
+    document.querySelector("#matchView").style.display = "none"
     document.querySelector("#logoutIcon").onclick = logout
 }
 
@@ -79,8 +107,17 @@ let showMatchSetup = () => {
     document.querySelector("#lobby").style.display = "none"
     document.querySelector("#matchSetup").style.display = "flex"
     document.querySelector("#logoutIcon").onclick = leaveMatch
+    document.querySelector("#matchPlayer1").innerHTML = "Esperando pelo jogador..."
+    document.querySelector("#matchPlayer2").innerHTML = "Esperando pelo jogador..."
+    document.querySelector("#matchView").style.display = "none"
     updateCardList()
     resetDeck()
+}
+
+let showMatchView = () => {
+    document.querySelector("#loginView").style.display = "none"
+    document.querySelector("#sessionView").style.display = "none"
+    document.querySelector("#matchView").style.display = "flex"
 }
 
 let updateCardList = () => {
@@ -147,7 +184,7 @@ let resetDeck = () => {
 
 let renderDeck = () => {
     let check = document.querySelector("#deckList button")
-    check.innerHTML = `Pronto (${deck.length}/26 cards)`
+    check.innerHTML = `Começar (${deck.length}/26 cards)`
 
     if(deck.length == 26)
         check.disabled = false
@@ -184,7 +221,9 @@ let cardName = (i) => {
 let addToDeck = (index) => {
     let count = 0
     for(i of deck) if(i == index) count += 1
-    if(count > 3 || deck.length == 26) {
+    if(deck.length == 26) {
+        alert("Você já tem 26 cartas no seu deck")
+    } else if(count > 3) {
         alert("Você já tem 4 cópias desta carta no seu deck")
     } else {
         deck.push(index)
@@ -339,20 +378,15 @@ let leaveMatch = () => {
 
 let setReady = () => {
     if (socket != 0) {
-        // adicionar as cartas (#cardlist)
-        // inpiração
-        // let name = document.querySelector("#matchInputField").value
-        let cards = document.querySelector("#cardlist").value
+        let cards = deck.join(" ")
         rpc(`setready ${cards}`, (e) => {
             let reply = e.data.split(" ")
             let result = reply.shift()
             if (result == "err") alert(e.data)
             else {
-                let matchDiv = document.querySelector("#match")
-                let waitDiv = document.querySelector("#wait")
-                // hide match UI
-                matchDiv.style.display = "none"
-                waitDiv.style.display = "block"
+                document.querySelector("#matchPlayer1").innerHTML = `${Username} pronto`
+                document.querySelector("#deckList button").disabled = true
+                document.querySelector("#logoutIcon").style.display = "none"
             }
         })
     } else {
@@ -361,12 +395,24 @@ let setReady = () => {
 }
 
 let matchBegin = (_) => {
-    let setup = document.querySelector("#setup")
-    let game = document.querySelector("#game")
-    setup.style.display = "none"
-    game.style.display = "block"
+    matchStartSound.play()
+    document.querySelector("#globalChatIcon").style.display = "none"
+    prepareMatchView()
+    showMatchView()
+
 }
 router["matchbegin"] = matchBegin
+
+let prepareMatchView = () => {
+    let fields = document.querySelectorAll("#halfField .field")
+    fields.forEach(field => {
+        field.classList = "field"
+        field.innerHTML = ""
+    })
+
+    let handView = document.querySelector("#handView")
+    handView.innerHTML = ""
+}
 
 let beginTurn = (_) => {
     let commands = document.querySelector("#commands")
@@ -379,6 +425,11 @@ let addToLog = (args) => {
     log.innerHTML = `${log.innerHTML}<p>${args.join(" ")}</p>`
 }
 router["gamelog"] = addToLog
+
+let matchError = (_) => {
+    alert("Algo deu errado")
+}
+router["matcherror"] = addToLog
 
 let endTurn = () => {
     if (socket != 0) {
@@ -482,7 +533,8 @@ let recvMessage = (args) => {
 
     if(!globalIsOpen) {
         document.querySelector("#globalChatIcon").style.backgroundColor = "red"
-        messageSound.play()
+        if(!Gamestate.inmatch)
+            messageSound.play()
     }
 }
 router["message"] = recvMessage
@@ -507,3 +559,4 @@ let updateMatches = (args) => {
     getMatches()
 }
 router["update_matches"] = updateMatches
+
