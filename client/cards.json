@@ -2,6 +2,7 @@
     "1": {
         "tipo": "criatura",
         "nome": "Girino",
+        "pic": "res/girino.jpeg",
         "nivel": 1,
         "terreno": "Rio",
         "alcance": 1,
@@ -14,6 +15,7 @@
     "2": {
         "tipo": "criatura",
         "nome": "Sapo",
+        "pic": "res/sapo.png",
         "nivel": 2,
         "base": "1",
         "terreno": "Floresta",

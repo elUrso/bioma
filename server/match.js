@@ -103,8 +103,8 @@ let setReady = (id, client, args) => {
         let match = matches[name]
         match.playersReady.push(id)
         client.send("ok")
-        console.log(match)
         match.userInfo[id] = new PlayerState(args)
+        console.log(match)
         if (match.playersReady.length === match.capacity) {
             broadcast(match, "! matchbegin")
             match.ready = true
@@ -117,7 +117,31 @@ let setReady = (id, client, args) => {
 }
 router['setready'] = setReady
 
+let prepareDeck = (userInfo) => {
+    let deck = []
+    userInfo.cards.forEach(card => {deck.push(card)})
+    // Fisher-Yates
+    for(let i = deck.length - 1; i >= 0; i--) {
+        let j = Math.floor(Math.random()*(i+1))
+        let c = deck[i]
+        deck[i] = deck[j]
+        deck[j] = c
+    }
+    userInfo.deck = deck
+}
+
 let startMatch = (match) => {
+    let objv = (a) => {
+        return Object.keys(a).map(k=>a[k])
+    }
+
+    objv(match.userInfo).forEach(info => {
+        prepareDeck(info)
+    })
+
+    match.playersID.forEach(id => {
+        drawCards(match, id, 5)
+    })
     /*
     let id = match.playersID[match.turn % match.capacity]
     let client = User.getClient(id)
@@ -131,10 +155,12 @@ let startMatch = (match) => {
     */
 }
 
-let drawCards = (match, id) => {
-    let cardid = Math.floor(Math.random() * 2)
-    match.userInfo[id].hand.push(cardid)
-    User.getClient(id).send(`! drawcard ${cardid}`)
+let drawCards = (match, id, n) => {
+    for(let i = 0; i < n; i++) {
+        let card = match.userInfo[id].deck.pop()
+        match.userInfo[id].hand.push(card)
+        User.getClient(id).send(`! drawcard ${card}`)
+    }
 }
 
 let nextTurn = (match) => {
@@ -192,6 +218,7 @@ class Match {
 class PlayerState {
     constructor(cards) {
         this.cards = cards
+        this.deck = []
         this.hand = []
     }
 }

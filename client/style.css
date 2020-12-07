@@ -335,6 +335,11 @@ button:hover {
     background-image: url("res/cobble.jpg");
     grid-area: action;
     border: 0.2rem solid black;
+    display: flex;
+    flex-flow: column;
+    justify-content: space-between;
+    padding: 1rem;
+    align-items: center;
 }
 
 #fieldView {
@@ -438,11 +443,15 @@ button:hover {
     background-image: url("res/cardBack.jpg");
 }
 
+.cardOnHand.selected {
+    border: 1vh solid gold;
+}
+
 .cardOnHand .name {
     border: 0.1rem solid black;
     width: 16vh;
     font-size: 2vh;
-    height: 4vh;
+    height: 7vh;
     background-color: #ffffffA7;
 }
 

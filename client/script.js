@@ -3,6 +3,7 @@ let hanlderQueue = []
 let router = {}
 let messageSound = new Audio('audio/clearly-602.mp3')
 let matchStartSound = new Audio('audio/confirm_style_5_echo_004.wav')
+let drawSound = new Audio('audio/draw.mp3')
 let Gamestate = {}
 Gamestate.inmatch = false
 let Username = ""
@@ -158,13 +159,15 @@ let renderCard = (card, index) => {
         div.querySelector(".life").innerHTML = `${card.life}`
         div.querySelector(".resistance").innerHTML = `${card.resistencia}`
         div.querySelector(".speed").innerHTML = `${card.velocidade}`
-        
     } else {
         div = effectDiv.cloneNode(true)
         div.querySelector(".name").innerHTML = card.nome
         div.querySelector(".kind").innerHTML = "(Efeito)"
         div.querySelector(".text").innerHTML = card.desc
     }
+
+    if('pic' in card)
+        div.querySelector("img").src = card.pic
 
     div.onclick = () => {
         addToDeck(index)
@@ -399,7 +402,7 @@ let matchBegin = (_) => {
     document.querySelector("#globalChatIcon").style.display = "none"
     prepareMatchView()
     showMatchView()
-
+    resetGame()
 }
 router["matchbegin"] = matchBegin
 
@@ -469,18 +472,56 @@ document.querySelectorAll(".card").forEach( x => {
 // draw card
 
 let drawCard = (args) => {
-    let card = new Card(args[0])
-    document.querySelector("#playerhand").appendChild(card.view)
+    Gamestate.hand.push(args[0])
+    drawSound.play()
+    renderCardsInHand()
 }
 router['drawcard'] = drawCard
 
-class Card {
-    constructor(cardid) {
-        this.view = document.createElement("div")
-        this.view.classList.add("card")
-        this.view.onmouseenter = showDetail
-        this.view.onmouseleave = hideDetail
+let cardInHandNode = document.createElement("div")
+cardInHandNode.classList.add("cardOnHand")
+cardInHandNode.innerHTML = `<div class="name"></div><img src="res/skeleton-x4.gif" alt="card image preview">`
+
+let renderCardsInHand = () => {
+    let renderName = (card) => {
+        if(card.tipo === "criatura")
+            return `${card.nome} <sup>Lv. ${card.nivel}</sup>`
+        else
+            return `${card.nome} <sup>⚡️</sup>`
     }
+
+    let hand = document.querySelector("#handView")
+
+    hand.innerHTML = ""
+
+    let i = 0
+
+    for(index of Gamestate.hand) {
+        let card = cardInHandNode.cloneNode(true)
+        card.childNodes[0].innerHTML=renderName(cards[index])
+        if('pic' in card)
+            card.querySelector('img').src = card.pic
+
+        let j = i
+
+        card.onclick = () => {
+            selectCardOnHand(j, index)
+        }
+
+        hand.appendChild(card)
+
+        i++
+    }
+}
+
+let selectCardOnHand = (handIndex, cardIndex) => {
+    let hand = document.querySelector("#handView")
+    
+    hand.childNodes.forEach(x => {
+        x.classList.remove("selected")
+    })
+    hand.childNodes[handIndex].classList.add("selected")
+
 }
 
 // global chat
@@ -544,6 +585,7 @@ router["message"] = recvMessage
 let resetUIState  = () => {
     document.querySelector("#loginView").style.display = "flex"
     document.querySelector("#sessionView").style.display = "none"
+    document.querySelector("#matchView").style.display = "none"
     document.querySelector("#globalMessages").innerHTML = ""
     document.querySelector("#logoutIcon").onclick = logout
 }
@@ -560,3 +602,8 @@ let updateMatches = (args) => {
 }
 router["update_matches"] = updateMatches
 
+// game state
+
+let resetGame = () => {
+    Gamestate.hand = []
+}
