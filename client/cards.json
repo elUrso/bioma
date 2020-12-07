@@ -43,5 +43,42 @@
         "alvo": "criatura",
         "desc": "A criatura ganha mais +1 de alcance",
         "command": "cont incvel 1"
+    },
+    "5": {
+        "tipo": "criatura",
+        "nome": "Cobra",
+        "nivel": 1,
+        "terreno": "Deserto",
+        "alcance": 1,
+        "poder": 10,
+        "critico": 0.5,
+        "life": 5,
+        "resistencia": 5,
+        "velocidade": 10
+    },
+    "6": {
+        "tipo": "criatura",
+        "nome": "Naja",
+        "nivel": 2,
+        "base": "5",
+        "terreno": "Deserto",
+        "alcance": 1,
+        "poder": 20,
+        "critico": 0.7,
+        "life": 10,
+        "resistencia": 5,
+        "velocidade": 20
+    },
+    "7": {
+        "tipo": "criatura",
+        "nome": "Escorpião",
+        "nivel": 1,
+        "terreno": "Deserto",
+        "alcance": 2,
+        "poder": 15,
+        "critico": 0.3,
+        "life": 4,
+        "resistencia": 8,
+        "velocidade": 12
     }
 }

@@ -111,7 +111,7 @@ let renderCard = (card, index) => {
         if(card.nivel == 1) {
             div.querySelector(".kind").innerHTML = "(Lv. 1)"
         } else {
-            div.querySelector(".kind").innerHTML = `(${cards[card.base].nome} Lv. ${cards.nivel})`
+            div.querySelector(".kind").innerHTML = `(${cards[card.base].nome} Lv. ${card.nivel})`
         }
         div.querySelector(".type").innerHTML = `[${card.terreno}]`
 
@@ -175,7 +175,7 @@ let cardName = (i) => {
         if(card.nivel == 1)
             return `${card.nome} (Lv. 1) [${card.terreno}]`
         else
-            return `${card.nome} (${cards[card.base].nome} Lv. ${cards.nivel}) [${card.terreno}]`         
+            return `${card.nome} (${cards[card.base].nome} Lv. ${card.nivel}) [${card.terreno}]`         
     } else {
         return `${card.nome} (Efeito)`
     }
