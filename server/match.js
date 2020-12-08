@@ -3,6 +3,10 @@ let matches = {}
 let playerInMatch = {}
 let User = {}
 
+var fs = require('fs');
+const { exit } = require('process');
+var cards = JSON.parse(fs.readFileSync('client/cards.json', 'utf8'));
+
 let inject = (tgt) => {
     for (key in router) {
         tgt.router[key] = router[key]
@@ -117,6 +121,20 @@ let setReady = (id, client, args) => {
 }
 router['setready'] = setReady
 
+let discardCard = (id, client, args) => {
+    let name = playerInMatch[id]
+    let match = matches[name]
+
+    let hand = match.userInfo[id].hand
+    let discard = match.userInfo[id].discard
+
+    hand.splice(hand.indexOf(args[0]), 1)
+    discard.push(args[0])
+
+    client.send("ok")
+}
+router['discard_card'] = discardCard
+
 let prepareDeck = (userInfo) => {
     let deck = []
     userInfo.cards.forEach(card => {deck.push(card)})
@@ -193,6 +211,56 @@ let getNumber = (id, client, args) => {
 }
 router['getnumber'] = getNumber
 
+let playCard = (id, client, args) => {
+    let cardIndex = args.shift()
+    let card = cards[cardIndex]
+
+    // user index
+    let iU = Number(args.shift())
+    // match index
+    let iM = iU + 1
+    let name = playerInMatch[id]
+    let match = matches[name]
+    if(id !== match.playersID[0])
+        iM = -iM
+    if(iM < 0)
+        iM += 8
+    else
+        iM += 7
+
+    let terreno = match.arena[iM]
+
+    if(card.tipo === "criatura") {
+        let criatura = new Criatura(cardIndex)
+        terreno.criatura = criatura
+        if(terreno.tipo === criatura.tipo && terreno.nivel < 3) {
+            terreno.nivel += 1
+            client.send(`! set_terreno_lv ${iU} ${terreno.nivel}`)
+        } else if(terreno.nivel === 0) {
+            terreno.nivel = 1
+            terreno.tipo = criatura.tipo
+            client.send(`! set_terreno_tipo ${iU} ${terreno.tipo}`)
+            client.send(`! set_terreno_lv ${iU} ${terreno.nivel}`)
+        } else {
+            terreno.nivel -= 1
+            if(terreno.nivel == 0) {
+                terreno.tipo = "vazio"
+                client.send(`! set_terreno_tipo ${iU} ${terreno.tipo}`)
+            }
+            client.send(`! set_terreno_lv ${iU} ${terreno.nivel}`)
+        }
+        // TODO! implement describeCreature
+        client.send(`! set_terreno_criatura ${describeCreature(criatura)}`)
+
+    } else {
+        console.log("TODO this bit")
+        exit(1)
+    }
+    
+    client.send('ok')
+}
+router['play_card'] = playCard
+
 let broadcast = (match, msg) => {
     match.playersID.forEach((id) => {
         let client = User.getClient(id)
@@ -212,6 +280,10 @@ class Match {
         this.ready = false
         this.turn = 0
         this.userInfo = {}
+        this.arena = []
+        for(let i = 0; i < 16; i++) {
+            this.arena.push(new Terreno())
+        }
     }
 }
 
@@ -220,6 +292,31 @@ class PlayerState {
         this.cards = cards
         this.deck = []
         this.hand = []
+        this.discard = []
+    }
+}
+
+class Terreno {
+    constructor() {
+        this.criatura = 0
+        this.nivel = 0
+        this.tipo = "vazio"
+    }
+}
+
+class Criatura {
+    constructor(id) {
+        let card = cards[id]
+        this.nome = card.nome
+        this.id = id
+        this.nivel = card.nivel
+        this.terreno = card.terreno
+        this.alcance = card.alcance
+        this.poder = card.poder
+        this.critico = card.critico
+        this.life = card.life
+        this.resistencia = card.resistencia
+        this.velocidade = card.velocidade
     }
 }
 

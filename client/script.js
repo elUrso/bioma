@@ -129,7 +129,12 @@ let updateCardList = () => {
 
 let renderCards = (cards, list) => {
     for(index in cards) {
-        list.appendChild(renderCard(cards[index], index))
+        let div = renderCard(cards[index])
+        let i = index
+        div.onclick = () => {
+            addToDeck(i)
+        }
+        list.appendChild(div)
     }
 }
 
@@ -141,7 +146,7 @@ let effectDiv = document.createElement("div")
 effectDiv.classList.add("cardView")
 effectDiv.innerHTML = `<img src="res/skeleton-x4.gif" alt="Card Art"><div class="detail"><div class="title"><div class="name"></div><div class="kind"></div><div class="type"></div></div><div class="text"></div></div>`
 
-let renderCard = (card, index) => {
+let renderCard = (card) => {
     let div
     if(card.tipo == "criatura") {
         div = creatureDiv.cloneNode(true)
@@ -168,10 +173,6 @@ let renderCard = (card, index) => {
 
     if('pic' in card)
         div.querySelector("img").src = card.pic
-
-    div.onclick = () => {
-        addToDeck(index)
-    }
 
     return div
 }
@@ -503,9 +504,10 @@ let renderCardsInHand = () => {
             card.querySelector('img').src = card.pic
 
         let j = i
+        let k = index
 
         card.onclick = () => {
-            selectCardOnHand(j, index)
+            selectCardOnHand(j, k)
         }
 
         hand.appendChild(card)
@@ -522,6 +524,135 @@ let selectCardOnHand = (handIndex, cardIndex) => {
     })
     hand.childNodes[handIndex].classList.add("selected")
 
+    let detail = document.querySelector("#actionView .detail")
+    detail.innerHTML = ""
+
+    let div = renderCardDetailView(cardIndex)
+
+    detail.appendChild(div)
+}
+
+let cardDetailView = document.createElement("div")
+cardDetailView.classList.add("box")
+cardDetailView.innerHTML = `<div class="name"></div><div class="kind"></div><div class="type"></div><img src="res/Sapo_animado.gif"/><div class="spec"><div class="range"></div><div class="power"></div><div class="critical"></div><div class="life"></div><div class="resistance"></div><div class="speed"></div></div><button class="play">Jogar</button><button class="discard">Descartar</button>`
+
+let cardEffectDetailView = document.createElement("div")
+cardEffectDetailView.classList.add("box")
+cardEffectDetailView.innerHTML = `<div class="name"></div><div class="kind"></div><div class="type"></div><img src="res/Sapo_animado.gif"/><div class="text"></div><button class="play">Jogar</button><button class="discard">Descartar</button>`
+
+let renderCardDetailView = (cardIndex) => {
+    let div
+    let card = cards[cardIndex]
+    if(card.tipo == "criatura") {
+        div = cardDetailView.cloneNode(true)
+        div.querySelector(".name").innerHTML = card.nome
+        if(card.nivel == 1) {
+            div.querySelector(".kind").innerHTML = "(Lv. 1)"
+        } else {
+            div.querySelector(".kind").innerHTML = `(${cards[card.base].nome} Lv. ${card.nivel})`
+        }
+        div.querySelector(".type").innerHTML = `[${card.terreno}]`
+
+        div.querySelector(".range").innerHTML = `${card.alcance}`
+        div.querySelector(".power").innerHTML = `${card.poder}`
+        div.querySelector(".critical").innerHTML = `${Math.floor(card.critico * 100)}%`
+        div.querySelector(".life").innerHTML = `${card.life}`
+        div.querySelector(".resistance").innerHTML = `${card.resistencia}`
+        div.querySelector(".speed").innerHTML = `${card.velocidade}`
+    } else {
+        div = cardEffectDetailView.cloneNode(true)
+        div.querySelector(".name").innerHTML = card.nome
+        div.querySelector(".kind").innerHTML = "(Efeito)"
+        div.querySelector(".text").innerHTML = card.desc
+    }
+
+    if('pic' in card)
+        div.querySelector("img").src = card.pic
+
+    let ci = cardIndex
+
+    if(canPlayCard(cardIndex))
+        div.querySelector(".play").onclick = () => {
+            queryField(ci)
+        }
+    else 
+        div.querySelector(".play").disabled = true
+
+    div.querySelector(".discard").onclick = () => {
+        discardCard(ci)
+    }
+
+    return div
+}
+
+let canPlayCard = (cardIndex) => {
+    let card = cards[cardIndex]
+    if(card.tipo === "criatura") {
+        if(card.nivel === 1) {
+            let lock = false
+            Gamestate.arena.forEach(terreno => {
+                if(terreno.criatura === 0)
+                  lock = true  
+            })
+            if(lock) return true
+        }
+        // TODO nivel 2 e 3
+    }
+    // TODO efeito
+
+    return false
+}
+
+let queryField = (cardIndex) => {
+    let canPlay = []
+    let card = cards[cardIndex]
+    for(let i = 0; i < 8; i++) {
+        if(card.tipo === "criatura") {
+            if(card.nivel === 1) {
+                if(Gamestate.arena[i].criatura === 0) {
+                    canPlay.push(i)
+                }
+            }
+            // TODO nivel 2 e 3
+        }
+        // TODO efeito
+    }
+
+    document.querySelectorAll("#halfField .field").forEach(div => {
+        div.classList.remove('canSelect')
+        div.onclick = null
+    })
+
+    for(i of canPlay) {
+        let div = document.querySelectorAll("#halfField .field")[i]
+        div.classList.add("canSelect")
+        div.onclick = () => {
+            playCard(cardIndex, i)
+        }
+    }
+}
+
+let playCard = (cardIndex, terrenoIndex) => {
+    document.querySelectorAll("#halfField .field").forEach(div => {
+        div.classList.remove('canSelect')
+        div.onclick = null
+    })
+
+    document.querySelector("#actionView .detail").innerHTML = ""
+
+    rpc(`play_card ${cardIndex} ${terrenoIndex}`, () => {})
+}
+
+
+
+let discardCard = (ci) => {
+    rpc(`discard_card ${ci}`, (e) => {
+        let detail = document.querySelector("#actionView .detail")
+        detail.innerHTML = ""
+
+        Gamestate.hand.splice(Gamestate.hand.indexOf(ci), 1)
+        renderCardsInHand()
+    })
 }
 
 // global chat
@@ -606,4 +737,32 @@ router["update_matches"] = updateMatches
 
 let resetGame = () => {
     Gamestate.hand = []
+    Gamestate.arena = []
+    for(let i = 0; i < 8; i++) {
+        Gamestate.arena.push(new Terreno())
+    }
+}
+
+class Terreno {
+    constructor() {
+        this.criatura = 0
+        this.nivel = 0
+        this.tipo = "vazio"
+    }
+}
+
+class Criatura {
+    constructor(id) {
+        let card = cards[id]
+        this.nome = card.nome
+        this.id = id
+        this.nivel = card.nivel
+        this.terreno = card.terreno
+        this.alcance = card.alcance
+        this.poder = card.poder
+        this.critico = card.critico
+        this.life = card.life
+        this.resistencia = card.resistencia
+        this.velocidade = card.velocidade
+    }
 }

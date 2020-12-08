@@ -35,3 +35,23 @@ deve fazer:
 extra:
 * [x] `getnumber` -> gera um numero aleatorio e envia para todos os jogadores (teste)
 * [x] `endturn` -> encerra o turno
+
+terreno {
+    criatura
+    nivel
+    tipo
+}
+
+criatura {
+    poder
+    nome
+    id
+    nivel
+    terreno
+    alcance
+    poder
+    critico
+    life
+    resistencia
+    velocidade
+}

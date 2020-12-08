@@ -240,6 +240,8 @@ button:hover {
     padding-right: 1rem;
 }
 
+
+
 .cardView .range::before {
     content: "📏 ";
 }
@@ -249,7 +251,7 @@ button:hover {
 }
 
 .cardView .resistance::before {
-    content: "🥽 ";
+    content: "🛡 ";
 }
 
 .cardView .critical::before {
@@ -340,6 +342,49 @@ button:hover {
     justify-content: space-between;
     padding: 1rem;
     align-items: center;
+    overflow-y: scroll;
+}
+
+#actionView .box {
+    border: 0.2rem solid black;
+    width: 40vh;
+    background-color: khaki;
+    background-image: url("res/cardBack.jpg");
+    padding: 0.5rem;
+}
+
+#actionView .box img {
+    height: 15vh;
+    width: 15vh;
+}
+
+#actionView .spec {
+    display: flex;
+    flex-flow: row;
+}
+
+#actionView .range::before {
+    content: "📏 ";
+}
+
+#actionView .power::before {
+    content: "💪 ";
+}
+
+#actionView .resistance::before {
+    content: "🛡 ";
+}
+
+#actionView .critical::before {
+    content: "⚡️ ";
+}
+
+#actionView .speed::before {
+    content: "🏃‍♂️ ";
+}
+
+#actionView .life::before {
+    content: "❤️ ";
 }
 
 #fieldView {
@@ -385,7 +430,8 @@ button:hover {
 }
 
 #halfField .field.florest {
-    background-image: url("res/florest.jpg");
+    background-image: url("res/floresta1.jpeg");
+    background-size: cover;
 }
 
 #halfField .field.mountain {
@@ -398,6 +444,10 @@ button:hover {
 
 #halfField .field.desert {
     background-image: url("res/desert.jpg");
+}
+
+#halfField .field.canSelect {
+    border: 0.5vh solid lawngreen;
 }
 
 .field .creature img {
