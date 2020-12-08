@@ -407,7 +407,7 @@ button:hover {
     gap: 2vh
 }
 
-#halfField .field {
+.field {
     background-color: khaki;
     background-image: url("res/universe.jpg");
     border: 0.5vh solid black;
@@ -417,37 +417,51 @@ button:hover {
     align-items: center;
 }
 
-#halfField .field.lv1 {
+.field.lv1 {
     border: 0.5vh solid sienna;
 }
 
-#halfField .field.lv2 {
+.field.lv2 {
     border: 0.5vh solid silver;
 }
 
-#halfField .field.lv3 {
+.field.lv3 {
     border: 0.5vh solid gold;
 }
 
-#halfField .field.florest {
+.field.florest.lv1 {
     background-image: url("res/floresta1.jpeg");
     background-size: cover;
 }
 
-#halfField .field.mountain {
+.field.florest.lv2 {
+    background-image: url("res/floresta2.jpeg");
+    background-size: cover;
+}
+
+.field.florest.lv3 {
+    background-image: url("res/floresta3.jpeg");
+    background-size: cover;
+}
+
+.field.mountain {
     background-image: url("res/mountain.jpg");
 }
 
-#halfField .field.river {
+.field.river {
     background-image: url("res/river.jpg");
 }
 
-#halfField .field.desert {
+.field.desert {
     background-image: url("res/desert.jpg");
 }
 
-#halfField .field.canSelect {
+.field.canSelect {
     border: 0.5vh solid lawngreen;
+}
+
+.field.selected {
+    border: 0.5vh solid white;
 }
 
 .field .creature img {
@@ -462,9 +476,23 @@ button:hover {
     align-self: center;
 }
 
+.field .creature .lifeblue {
+    font-weight: bold;
+    color: white;
+    width: fit-content;
+    align-self: center;
+}
+
+
 .field .creature .life::before {
     content: "❤️";
 }
+
+
+.field .creature .lifeblue::before {
+    content: "💙";
+}
+
 
 #handView {
     background-color: khaki;
@@ -515,12 +543,81 @@ button:hover {
     height: 16vh;
 }
 
+#waitingForPlayer {
+    position: absolute;
+    display: none;
+    flex-flow: row;
+    justify-content: center;
+    align-items: center;
+    width: calc(100% - 1rem);
+    height: calc(100% - 1rem);
+    left: 0;
+    top: 0;
+    background-color: khaki;
+    border: 0.5rem solid black;
+    z-index: 999;
+}
+
 
 @media (pointer:none), (pointer:coarse) {
     #matchListColumn>.header, #userListColumn>.header, #globalChat>.header {
         min-height: 2.2rem;
     }
 }
+
+#battle {
+    position: absolute;
+    width: calc(100% - 1rem);
+    height: calc(100% - 1rem);
+    left: 0;
+    top: 0;
+    background-color: khaki;
+    border: 0.5rem solid black;
+    z-index: 500;
+
+    display: none;
+    grid-template-columns: 1fr 2fr;
+}
+
+#battleField {
+    background-color: khaki;
+    background-image: url("res/table.jpg");
+    background-size: cover;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#fullField {
+    display: grid;
+    grid-template-columns: 20vh 20vh 20vh 20vh;
+    grid-template-rows: 20vh 20vh 20vh 20vh;
+    gap: 2vh;
+}
+
+#eventlog {
+    background-color: khaki;
+    border-right: 0.2rem solid black;
+    overflow-y: scroll;
+}
+
+#eventlog .message {
+    background-color: white;
+    margin: 0.2rem 0.1rem 0.2rem 0.1rem;
+    padding: 0.2rem 0.4rem 0.2rem 0.4rem;
+    border: 0.1rem solid black;
+}
+
+#score {
+    background-color: khaki;
+    position: absolute;
+    right: 0;
+    top: 0;
+    border: 0.2rem solid black;
+    padding: 0.2rem 0.4rem 0.2rem 0.4rem;
+}
+
 
 .p1 {
     font-size: 0.8rem;

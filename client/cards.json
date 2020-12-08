@@ -2,15 +2,15 @@
     "1": {
         "tipo": "criatura",
         "nome": "Girino",
-        "pic": "res/girino.jpeg",
+        "pic": "res/girino.png",
         "nivel": 1,
-        "terreno": "Rio",
+        "terreno": "Floresta",
         "alcance": 1,
         "poder": 10,
         "critico": 0.01,
-        "life": 5,
-        "resistencia": 2,
-        "velocidade": 5
+        "life": 20,
+        "resistencia": 10,
+        "velocidade": 8
     },
     "2": {
         "tipo": "criatura",
@@ -19,68 +19,73 @@
         "nivel": 2,
         "base": "1",
         "terreno": "Floresta",
-        "alcance": 2,
+        "alcance": 1,
         "poder": 20,
         "critico": 0.05,
-        "life": 10,
-        "resistencia": 10,
-        "velocidade": 10
+        "life": 45,
+        "resistencia": 25,
+        "velocidade": 12
     },
     "3": {
         "tipo": "criatura",
         "nome": "Sapão",
+        "pic": "res/sapao.png",
         "nivel": 3,
         "base": "2",
         "terreno": "Floresta",
-        "alcance": 3,
-        "poder": 40,
-        "critico": 0.2,
-        "life": 30,
-        "resistencia": 20,
+        "alcance": 2,
+        "poder": 25,
+        "critico": 0.1,
+        "life": 60,
+        "resistencia": 30,
         "velocidade": 15
     },
     "4": {
         "tipo": "efeito",
         "nome": "Crescimento Acelerado",
+        "pic": "res/crescimento.png",
         "alvo": "criatura",
-        "desc": "A criatura ganha mais +1 de alcance",
-        "command": "cont incvel 1"
+        "desc": "A criatura ganha mais +5 de velocidade",
+        "command": "cont incvel 5"
     },
     "5": {
         "tipo": "criatura",
         "nome": "Cobra",
+        "pic": "res/cobra.png",
         "nivel": 1,
         "terreno": "Deserto",
         "alcance": 1,
         "poder": 10,
-        "critico": 0.5,
-        "life": 5,
-        "resistencia": 5,
-        "velocidade": 10
+        "critico": 0.1,
+        "life": 23,
+        "resistencia": 8,
+        "velocidade": 11
     },
     "6": {
         "tipo": "criatura",
         "nome": "Naja",
+        "pic": "res/naja.png",
         "nivel": 2,
         "base": "5",
         "terreno": "Deserto",
-        "alcance": 1,
+        "alcance": 2,
         "poder": 20,
-        "critico": 0.7,
-        "life": 10,
-        "resistencia": 5,
-        "velocidade": 20
+        "critico": 0.3,
+        "life": 30,
+        "resistencia": 10,
+        "velocidade": 16
     },
     "7": {
         "tipo": "criatura",
         "nome": "Escorpião",
+        "pic": "res/escorpiao.png",
         "nivel": 1,
         "terreno": "Deserto",
         "alcance": 2,
-        "poder": 15,
+        "poder": 10,
         "critico": 0.3,
-        "life": 4,
-        "resistencia": 8,
-        "velocidade": 12
+        "life": 18,
+        "resistencia": 10,
+        "velocidade": 9
     }
 }

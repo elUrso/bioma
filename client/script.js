@@ -4,6 +4,11 @@ let router = {}
 let messageSound = new Audio('audio/clearly-602.mp3')
 let matchStartSound = new Audio('audio/confirm_style_5_echo_004.wav')
 let drawSound = new Audio('audio/draw.mp3')
+let eventSound = new Audio('audio/sound.wav')
+
+let winSound = new Audio('audio/win.wav')
+let loseSound = new Audio('audio/lose.mp3')
+
 let Gamestate = {}
 Gamestate.inmatch = false
 let Username = ""
@@ -272,7 +277,8 @@ let dispatch = (args) => {
     if (command in router) {
         router[command](args)
     } else {
-        alert("err unknown command sent from server")
+        alert(`err unknown command sent from server: ${command}`)
+        console.log(args)
     }
 }
 
@@ -424,22 +430,10 @@ let beginTurn = (_) => {
 }
 router["beginturn"] = beginTurn
 
-let addToLog = (args) => {
-    let log = document.querySelector("#log")
-    log.innerHTML = `${log.innerHTML}<p>${args.join(" ")}</p>`
-}
-router["gamelog"] = addToLog
-
-let matchError = (_) => {
-    alert("Algo deu errado")
-}
-router["matcherror"] = addToLog
-
 let endTurn = () => {
     if (socket != 0) {
         rpc("endturn", (e) => {
-            let commands = document.querySelector("#commands")
-            commands.style.display = "none"
+            document.querySelector("#waitingForPlayer").style.display = "flex"
         })
     } else {
         alert("Please, login before")
@@ -474,7 +468,7 @@ document.querySelectorAll(".card").forEach( x => {
 
 let drawCard = (args) => {
     Gamestate.hand.push(args[0])
-    drawSound.play()
+    drawSound.cloneNode(true).play()
     renderCardsInHand()
 }
 router['drawcard'] = drawCard
@@ -500,8 +494,8 @@ let renderCardsInHand = () => {
     for(index of Gamestate.hand) {
         let card = cardInHandNode.cloneNode(true)
         card.childNodes[0].innerHTML=renderName(cards[index])
-        if('pic' in card)
-            card.querySelector('img').src = card.pic
+        if('pic' in cards[index])
+            card.querySelector('img').src = cards[index].pic
 
         let j = i
         let k = index
@@ -517,11 +511,14 @@ let renderCardsInHand = () => {
 }
 
 let selectCardOnHand = (handIndex, cardIndex) => {
+    renderHalfView()
+
     let hand = document.querySelector("#handView")
     
     hand.childNodes.forEach(x => {
         x.classList.remove("selected")
     })
+    
     hand.childNodes[handIndex].classList.add("selected")
 
     let detail = document.querySelector("#actionView .detail")
@@ -595,10 +592,28 @@ let canPlayCard = (cardIndex) => {
                   lock = true  
             })
             if(lock) return true
+        } else {
+            let lock = false
+            Gamestate.arena.forEach(terreno => {
+                if(terreno.criatura !== 0)
+                    if(terreno.criatura.id === card.base)
+                        lock = true
+            })
+            if(lock) return true
         }
-        // TODO nivel 2 e 3
     }
-    // TODO efeito
+    if(card.tipo === "efeito") {
+        if(card.alvo == "criatura") {
+            let lock = false
+            Gamestate.arena.forEach(terreno => {
+                if(terreno.criatura != 0)
+                  lock = true  
+            })
+            if(lock) return true
+        } else {
+            alert("Este efeito ainda não foi implementado")
+        }
+    }
 
     return false
 }
@@ -612,10 +627,19 @@ let queryField = (cardIndex) => {
                 if(Gamestate.arena[i].criatura === 0) {
                     canPlay.push(i)
                 }
+            } else {
+                if(Gamestate.arena[i].criatura !== 0)
+                    if(Gamestate.arena[i].criatura.id === card.base)
+                        canPlay.push(i)
             }
-            // TODO nivel 2 e 3
         }
-        // TODO efeito
+        if(card.tipo === "efeito") {
+            if(card.alvo == "criatura") {
+                if(Gamestate.arena[i].criatura != 0) {
+                    canPlay.push(i)
+                }
+            }
+        }
     }
 
     document.querySelectorAll("#halfField .field").forEach(div => {
@@ -626,8 +650,9 @@ let queryField = (cardIndex) => {
     for(i of canPlay) {
         let div = document.querySelectorAll("#halfField .field")[i]
         div.classList.add("canSelect")
+        let j = i
         div.onclick = () => {
-            playCard(cardIndex, i)
+            playCard(cardIndex, j)
         }
     }
 }
@@ -640,6 +665,7 @@ let playCard = (cardIndex, terrenoIndex) => {
 
     document.querySelector("#actionView .detail").innerHTML = ""
 
+    console.log(`play_card ${cardIndex} ${terrenoIndex}`)
     rpc(`play_card ${cardIndex} ${terrenoIndex}`, () => {})
 }
 
@@ -654,6 +680,14 @@ let discardCard = (ci) => {
         renderCardsInHand()
     })
 }
+
+let discardByPlay = (args) => {
+    let index = args.shift()
+    Gamestate.hand.splice(Gamestate.hand.indexOf(index), 1)
+    
+    renderCardsInHand()
+}
+router['discard'] = discardByPlay
 
 // global chat
 
@@ -741,6 +775,10 @@ let resetGame = () => {
     for(let i = 0; i < 8; i++) {
         Gamestate.arena.push(new Terreno())
     }
+    Gamestate.battle = []
+    for(let i = 0; i < 16; i++) {
+        Gamestate.battle.push(new Terreno())
+    }
 }
 
 class Terreno {
@@ -766,3 +804,265 @@ class Criatura {
         this.velocidade = card.velocidade
     }
 }
+
+// Update halfView
+
+let tipoToClass = {
+    Floresta: "florest",
+    Deserto: "desert",
+    Rio: "river",
+    Montanha:  "mountain"
+}
+
+
+let renderHalfView = () => {
+    let arena = Gamestate.arena
+    let divs = document.querySelectorAll("#halfField .field")
+    for(let i = 0; i < arena.length; i++) {
+        let terreno = arena[i]
+        let div = divs[i]
+        div.classList = "field"
+        if(terreno.nivel > 0)
+            div.classList.add(`lv${terreno.nivel}`)
+        if(terreno.tipo !== "vazio")
+            div.classList.add(tipoToClass[terreno.tipo])
+        div.innerHTML = ""
+        if(terreno.criatura !== 0) {
+            div.innerHTML = `<div class="creature"><img src="res/blank.png"/><div class="life"></div></div>`
+            div.querySelector(".life").innerHTML = terreno.criatura.life
+            let card = cards[terreno.criatura.id]
+            if("pic" in card) {
+                div.querySelector("img").src = card.pic
+            }
+        }
+
+        div.onclick = () => {
+            mostraTerreno(terreno, div)
+        }
+    }
+}
+
+let mostraTerreno = (terreno, div) => {
+    renderHalfView()
+
+    let detail = document.querySelector("#actionView .detail")
+    detail.innerHTML = ""
+
+    if(terreno.criatura !== 0) {
+        let div = renderCriaturaDetailView(terreno.criatura)
+        detail.appendChild(div)
+    }
+
+    let tDiv = document.createElement("div")
+    tDiv.classList = "box"
+    tDiv.innerHTML = `${terreno.tipo} Lv.${terreno.nivel}`
+
+    detail.appendChild(tDiv)
+
+    div.classList.add("selected")
+}
+
+let criaturaDetailView = document.createElement("div")
+criaturaDetailView.classList.add("box")
+criaturaDetailView.innerHTML = `<div class="name"></div><div class="kind"></div><div class="type"></div><img src="res/Sapo_animado.gif"/><div class="spec"><div class="range"></div><div class="power"></div><div class="critical"></div><div class="life"></div><div class="resistance"></div><div class="speed"></div></div>`
+
+let renderCriaturaDetailView = (criatura) => {
+    let div = criaturaDetailView.cloneNode(true)
+    let card = cards[criatura.id]
+
+    div.querySelector(".name").innerHTML = criatura.nome
+    if(criatura.nivel == 1) {
+        div.querySelector(".kind").innerHTML = "(Lv. 1)"
+    } else {
+        div.querySelector(".kind").innerHTML = `(${cards[card.base].nome} Lv. ${criatura.nivel})`
+    }
+    div.querySelector(".type").innerHTML = `[${criatura.terreno}]`
+
+    div.querySelector(".range").innerHTML = `${criatura.alcance}`
+    div.querySelector(".power").innerHTML = `${criatura.poder}`
+    div.querySelector(".critical").innerHTML = `${Math.floor(criatura.critico * 100)}%`
+    div.querySelector(".life").innerHTML = `${criatura.life}`
+    div.querySelector(".resistance").innerHTML = `${criatura.resistencia}`
+    div.querySelector(".speed").innerHTML = `${criatura.velocidade}`
+
+
+    if('pic' in card)
+        div.querySelector("img").src = card.pic
+
+    return div
+}
+
+let setTerrenoTipo = (args) => {
+    let index = Number(args.shift())
+    let tipo = args.shift()
+
+    Gamestate.arena[index].tipo = tipo
+
+    renderHalfView()
+}
+router["set_terreno_tipo"] = setTerrenoTipo
+
+let setTerrenoLv = (args) => {
+    let index = Number(args.shift())
+    let nivel = Number(args.shift())
+
+    Gamestate.arena[index].nivel = nivel
+
+    renderHalfView()
+}
+router["set_terreno_lv"] = setTerrenoLv
+
+let setTerrenoCriatura = (args) => {
+    let index = Number(args.shift())
+    let id = args.shift()
+    let extract = ["alcance", "poder", "critico", "life", "resistencia", "velocidade"]
+    let criatura = new Criatura(id)
+    for(feature of extract) {
+        let value = Number(args.shift())
+        criatura[feature] = value
+    }
+    if(args.length == 1) {
+        criatura.side = Number(args.shift())
+    }
+    Gamestate.arena[index].criatura = criatura
+
+    renderHalfView()
+}
+router["set_terreno_criatura"] = setTerrenoCriatura
+
+let setTerrenoEmpty = (args) => {
+    let index = Number(args.shift())
+    Gamestate.arena[index].criatura = 0
+
+    renderHalfView()
+}
+router["set_terreno_empty"] = setTerrenoEmpty
+
+
+// battle handlers
+let showBattleView = () => {
+    document.querySelector("#waitingForPlayer").style.display = "none"
+    document.querySelector("#battle").style.display = "grid"   
+}
+router["showbattle"] = showBattleView
+
+let setTTipo = (args) => {
+    let index = Number(args.shift())
+    let tipo = args.shift()
+
+    Gamestate.battle[index].tipo = tipo
+
+    renderFullView()
+}
+router["set_t_tipo"] = setTTipo
+
+let setTLv = (args) => {
+    let index = Number(args.shift())
+    let nivel = Number(args.shift())
+
+    Gamestate.battle[index].nivel = nivel
+
+    renderFullView()
+}
+router["set_t_lv"] = setTLv
+
+let setTCriatura = (args) => {
+    let index = Number(args.shift())
+    let id = args.shift()
+    let extract = ["alcance", "poder", "critico", "life", "resistencia", "velocidade", "side"]
+    let criatura = new Criatura(id)
+    for(feature of extract) {
+        let value = Number(args.shift())
+        criatura[feature] = value
+    }
+    Gamestate.battle[index].criatura = criatura
+
+    renderFullView()
+}
+router["set_t_criatura"] = setTCriatura
+
+let setTEmpty = (args) => {
+    let index = Number(args.shift())
+    Gamestate.battle[index].criatura = 0
+
+    renderFullView()
+}
+router["set_t_empty"] = setTEmpty
+
+let renderFullView = () => {
+    let arena = Gamestate.battle
+    let divs = document.querySelectorAll("#fullField .field")
+    for(let i = 0; i < arena.length; i++) {
+        let terreno = arena[i]
+        let div = divs[i]
+        div.classList = "field"
+        if(terreno.nivel > 0)
+            div.classList.add(`lv${terreno.nivel}`)
+        if(terreno.tipo !== "vazio")
+            div.classList.add(tipoToClass[terreno.tipo])
+        div.innerHTML = ""
+        if(terreno.criatura !== 0) {
+            div.innerHTML = `<div class="creature"><img src="res/blank.png"/><div class="life"></div></div>`
+            div.querySelector(".life").innerHTML = terreno.criatura.life
+            if("side" in terreno.criatura && terreno.criatura.side == 0) {
+                div.querySelector(".life").classList="lifeblue"
+            }
+            let card = cards[terreno.criatura.id]
+            if("pic" in card) {
+                div.querySelector("img").src = card.pic
+            }
+        }
+    }
+}
+
+// eventlog
+
+let cleanLog = (args) => {
+    document.querySelector("#eventlog").innerHTML = ""
+}
+router["cleanlog"] = cleanLog
+
+let addToLog = (args) => {
+    eventSound.cloneNode(true).play()
+    let log = document.querySelector("#eventlog")
+    log.innerHTML = `${log.innerHTML}<div class="message">${args.join(" ")}</div>`
+    log.scrollTop = log.scrollHeight
+}
+router["gamelog"] = addToLog
+
+// win and lose sound
+
+let playLoseSound = (args) => {
+    loseSound.cloneNode(true).play()
+}
+router["playlosesound"] = playLoseSound
+
+
+let playWinSound = (args) => {
+    winSound.cloneNode(true).play()
+}
+router["playwinsound"] = playWinSound
+
+// newTurn
+
+let endBattle = (args) => {
+    document.querySelector("#battle").style.display = "none"
+}
+
+router["endbattle"] = endBattle
+
+// score
+
+let showScore = (args) => {
+    document.querySelector("#score").innerHTML = args.join(" ")
+}
+
+router["score"] = showScore
+
+// endGame
+
+let endMatch = (args) => {
+    leaveMatch()
+    alert(args.join(" "))
+}
+router["endmatch"] = endMatch
