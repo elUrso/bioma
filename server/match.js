@@ -501,7 +501,7 @@ let move = (match, actor) => {
     if(y < 3 && match.battle[actor+4].criatura === 0)
         canMoveTo.push([actor+4, mdte(match, actor+4, c.side)])
     if(x < 3 && match.battle[actor+1].criatura === 0)
-        canMoveTo.push([actor+1, mdte(match, actor-1, c.side)])
+        canMoveTo.push([actor+1, mdte(match, actor+1, c.side)])
 
     let min = 999
     let minP = []
