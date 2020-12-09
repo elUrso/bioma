@@ -255,6 +255,8 @@ let nextTurn = (match) => {
     for(key of Object.keys(match.userInfo)) {
         match.userInfo[key].ready = false
     }
+
+    match.turn++
 }
 
 let endTurn = (id, client, args) => {

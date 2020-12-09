@@ -140,5 +140,19 @@
         "life": 10,
         "resistencia": 20,
         "velocidade": 12
+    },
+    "12": {
+        "tipo": "criatura",
+        "nome": "Águia Mega Blaster",
+        "pic": "res/Aguia_com_voar.png",
+        "nivel": 3,
+        "base": "9",
+        "terreno": "Montanha",
+        "alcance": 3,
+        "poder": 40,
+        "critico": 0.75,
+        "life": 30,
+        "resistencia": 0,
+        "velocidade": 20
     }
 }
