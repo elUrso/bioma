@@ -2,7 +2,7 @@
     "1": {
         "tipo": "criatura",
         "nome": "Girino",
-        "pic": "res/girino.png",
+        "pic": "res/Girino.png",
         "nivel": 1,
         "terreno": "Floresta",
         "alcance": 1,
@@ -15,7 +15,7 @@
     "2": {
         "tipo": "criatura",
         "nome": "Sapo",
-        "pic": "res/sapo.png",
+        "pic": "res/Sapo_animado.gif",
         "nivel": 2,
         "base": "1",
         "terreno": "Floresta",
@@ -29,7 +29,7 @@
     "3": {
         "tipo": "criatura",
         "nome": "Sapão",
-        "pic": "res/sapao.png",
+        "pic": "res/Sapo2.png",
         "nivel": 3,
         "base": "2",
         "terreno": "Floresta",
@@ -51,7 +51,7 @@
     "5": {
         "tipo": "criatura",
         "nome": "Cobra",
-        "pic": "res/cobra.png",
+        "pic": "res/Cobra.png",
         "nivel": 1,
         "terreno": "Deserto",
         "alcance": 1,
@@ -64,7 +64,7 @@
     "6": {
         "tipo": "criatura",
         "nome": "Naja",
-        "pic": "res/naja.png",
+        "pic": "res/Naja.png",
         "nivel": 2,
         "base": "5",
         "terreno": "Deserto",
@@ -87,5 +87,58 @@
         "life": 18,
         "resistencia": 10,
         "velocidade": 9
+    },
+    "8": {
+        "tipo": "criatura",
+        "nome": "Ovo de águia",
+        "pic": "res/Ovo.png",
+        "nivel": 1,
+        "terreno": "Montanha",
+        "alcance": 1,
+        "poder": 5,
+        "critico": 0.1,
+        "life": 20,
+        "resistencia": 0,
+        "velocidade": 1
+    },
+    "9": {
+        "tipo": "criatura",
+        "nome": "Águia",
+        "pic": "res/Aguia.png",
+        "nivel": 2,
+        "base": "8",
+        "terreno": "Montanha",
+        "alcance": 2,
+        "poder": 30,
+        "critico": 0.5,
+        "life": 30,
+        "resistencia": 0,
+        "velocidade": 15
+    },
+    "10": {
+        "tipo": "criatura",
+        "nome": "Coelho",
+        "pic": "res/Coelho.png",
+        "nivel": 1,
+        "terreno": "Floresta",
+        "alcance": 1,
+        "poder": 10,
+        "critico": 0.05,
+        "life": 10,
+        "resistencia": 20,
+        "velocidade": 15
+    },
+    "11": {
+        "tipo": "criatura",
+        "nome": "Morcego",
+        "pic": "res/Morcego.png",
+        "nivel": 1,
+        "terreno": "Montanha",
+        "alcance": 2,
+        "poder": 8,
+        "critico": 0.25,
+        "life": 10,
+        "resistencia": 20,
+        "velocidade": 12
     }
 }

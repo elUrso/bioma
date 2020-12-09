@@ -448,12 +448,28 @@ button:hover {
     background-image: url("res/mountain.jpg");
 }
 
-.field.river {
-    background-image: url("res/river.jpg");
+.field.river.lv1 {
+    background-image: url("res/Oceano.png");
 }
 
-.field.desert {
-    background-image: url("res/desert.jpg");
+.field.river.lv2 {
+    background-image: url("res/Oceano2.png");
+}
+
+.field.river.lv3 {
+    background-image: url("res/Oceano3.png");
+}
+
+.field.desert.lv1 {
+    background-image: url("res/Deserto1.png");
+}
+
+.field.desert.lv2 {
+    background-image: url("res/Deserto2.png");
+}
+
+.field.desert.lv3 {
+    background-image: url("res/Deserto3.png");
 }
 
 .field.canSelect {
