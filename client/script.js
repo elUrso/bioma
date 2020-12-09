@@ -1064,5 +1064,7 @@ router["score"] = showScore
 let endMatch = (args) => {
     leaveMatch()
     alert(args.join(" "))
+    document.querySelector("#globalChatIcon").style.display = "block"
+    document.querySelector("#logoutIcon").style.display ="block"
 }
 router["endmatch"] = endMatch
