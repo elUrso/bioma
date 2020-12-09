@@ -610,6 +610,13 @@ let canPlayCard = (cardIndex) => {
                   lock = true  
             })
             if(lock) return true
+        } if(card.alvo == "criatura 1") {
+            let lock = false
+            Gamestate.arena.forEach(terreno => {
+                if(terreno.criatura != 0 && terreno.criatura.nivel === 1)
+                  lock = true  
+            })
+            if(lock) return true
         } else {
             alert("Este efeito ainda não foi implementado")
         }
@@ -637,6 +644,12 @@ let queryField = (cardIndex) => {
             if(card.alvo == "criatura") {
                 if(Gamestate.arena[i].criatura != 0) {
                     canPlay.push(i)
+                }
+            }
+            
+            if(card.alvo == "criatura 1") {
+                if(Gamestate.arena[i].criatura != 0 && Gamestate.arena[i].criatura.nivel === 1) {
+                    canPlay.push(i) 
                 }
             }
         }

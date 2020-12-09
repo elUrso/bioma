@@ -235,8 +235,16 @@ let nextTurn = (match) => {
     let id0 = match.playersID[0]
     let id1 = match.playersID[1]
 
-    let d0 = 5 - match.sp0 - match.userInfo[id0].hand.length
-    let d1 = 5 - match.sp1 - match.userInfo[id1].hand.length
+    let d0 = 5 - match.sp0*2 - match.userInfo[id0].hand.length
+    let d1 = 5 - match.sp1*2 - match.userInfo[id1].hand.length
+
+    if(id0 !== 0 & id1 === 0) {
+        d1++
+    }
+
+    if(id0 === 0 & id1 !== 0) {
+        d0++
+    }
 
     if(d0 > 0) drawCards(match, id0, d0)
     if(d1 > 0) drawCards(match, id1, d1)
@@ -659,8 +667,9 @@ let playCard = (id, client, args) => {
     if(card.tipo === "criatura") {
         let criatura = new Criatura(cardIndex)
         terreno.criatura = criatura
-        if(terreno.tipo === criatura.terreno && terreno.nivel < 3) {
-            terreno.nivel += 1
+        if(terreno.tipo === criatura.terreno) {
+            if(terreno.nivel < 3)
+                terreno.nivel += 1
             client.send(`! set_terreno_lv ${iU} ${terreno.nivel}`)
         } else if(terreno.nivel === 0) {
             terreno.nivel = 1
@@ -680,6 +689,10 @@ let playCard = (id, client, args) => {
     } else if(card.tipo === "efeito") {
         if(card.command === "cont incvel 5") {
             terreno.criatura.velocidade += 5
+            client.send(`! set_terreno_criatura ${iU} ${describeCreature(terreno.criatura)}`)
+        }
+        if(card.command === "cont power 2x") {
+            terreno.criatura.poder *= 2 
             client.send(`! set_terreno_criatura ${iU} ${describeCreature(terreno.criatura)}`)
         }
     } else {
