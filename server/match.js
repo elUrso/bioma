@@ -238,12 +238,12 @@ let nextTurn = (match) => {
     let d0 = 5 - match.sp0*2 - match.userInfo[id0].hand.length
     let d1 = 5 - match.sp1*2 - match.userInfo[id1].hand.length
 
-    if(id0 !== 0 & id1 === 0) {
-        d1++
+    if(match.sp0 !== 0 & match.sp1 === 0) {
+        d1 += 2
     }
 
-    if(id0 === 0 & id1 !== 0) {
-        d0++
+    if(match.sp0 === 0 & match.sp1 !== 0) {
+        d0 += 2
     }
 
     if(d0 > 0) drawCards(match, id0, d0)
