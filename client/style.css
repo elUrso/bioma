@@ -541,7 +541,7 @@ button:hover {
     justify-content: space-around;
     align-items: center;
     background-color: white;
-    background-image: url("res/cardBack.jpg");
+    background-image: url("res/back.jpg");
 }
 
 .cardOnHand.selected {
