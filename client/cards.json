@@ -2,7 +2,7 @@
     "1": {
         "tipo": "criatura",
         "nome": "Girino",
-        "pic": "res/Girino.png",
+        "pic": "res/girino.png",
         "nivel": 1,
         "terreno": "Floresta",
         "alcance": 1,
@@ -15,7 +15,7 @@
     "2": {
         "tipo": "criatura",
         "nome": "Sapo",
-        "pic": "res/Sapo_animado.gif",
+        "pic": "res/sapo_animado.gif",
         "nivel": 2,
         "base": "1",
         "terreno": "Floresta",
@@ -29,7 +29,7 @@
     "3": {
         "tipo": "criatura",
         "nome": "Sapão",
-        "pic": "res/Sapo2.png",
+        "pic": "res/sapo2.png",
         "nivel": 3,
         "base": "2",
         "terreno": "Floresta",
@@ -51,7 +51,7 @@
     "5": {
         "tipo": "criatura",
         "nome": "Cobra",
-        "pic": "res/Cobra.png",
+        "pic": "res/cobra.png",
         "nivel": 1,
         "terreno": "Deserto",
         "alcance": 1,
@@ -64,7 +64,7 @@
     "6": {
         "tipo": "criatura",
         "nome": "Naja",
-        "pic": "res/Naja.png",
+        "pic": "res/naja.png",
         "nivel": 2,
         "base": "5",
         "terreno": "Deserto",
@@ -91,7 +91,7 @@
     "8": {
         "tipo": "criatura",
         "nome": "Ovo de águia",
-        "pic": "res/Ovo.png",
+        "pic": "res/ovo.png",
         "nivel": 1,
         "terreno": "Montanha",
         "alcance": 1,
@@ -104,7 +104,7 @@
     "9": {
         "tipo": "criatura",
         "nome": "Águia",
-        "pic": "res/Aguia.png",
+        "pic": "res/aguia.png",
         "nivel": 2,
         "base": "8",
         "terreno": "Montanha",
@@ -118,7 +118,7 @@
     "10": {
         "tipo": "criatura",
         "nome": "Coelho",
-        "pic": "res/Coelho.png",
+        "pic": "res/coelho.png",
         "nivel": 1,
         "terreno": "Floresta",
         "alcance": 1,
@@ -131,7 +131,7 @@
     "11": {
         "tipo": "criatura",
         "nome": "Morcego",
-        "pic": "res/Morcego.png",
+        "pic": "res/morcego.png",
         "nivel": 1,
         "terreno": "Montanha",
         "alcance": 2,
@@ -144,7 +144,7 @@
     "12": {
         "tipo": "criatura",
         "nome": "Águia Mega Blaster",
-        "pic": "res/Aguia_com_voar.png",
+        "pic": "res/aguia_com_voar.png",
         "nivel": 3,
         "base": "9",
         "terreno": "Montanha",

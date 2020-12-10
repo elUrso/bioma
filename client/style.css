@@ -349,7 +349,7 @@ button:hover {
     border: 0.2rem solid black;
     width: 40vh;
     background-color: khaki;
-    background-image: url("res/cardBack.jpg");
+    background-image: url("res/cardback.jpg");
     padding: 0.5rem;
 }
 
@@ -450,32 +450,32 @@ button:hover {
 }
 
 .field.river.lv1 {
-    background-image: url("res/Oceano.png");
+    background-image: url("res/oceano.png");
     background-size: cover;
 }
 
 .field.river.lv2 {
-    background-image: url("res/Oceano2.png");
+    background-image: url("res/oceano2.png");
     background-size: cover;
 }
 
 .field.river.lv3 {
-    background-image: url("res/Oceano3.png");
+    background-image: url("res/oceano3.png");
     background-size: cover;
 }
 
 .field.desert.lv1 {
-    background-image: url("res/Deserto1.png");
+    background-image: url("res/deserto1.png");
     background-size: cover;
 }
 
 .field.desert.lv2 {
-    background-image: url("res/Deserto2.png");
+    background-image: url("res/deserto2.png");
     background-size: cover;
 }
 
 .field.desert.lv3 {
-    background-image: url("res/Deserto3.png");
+    background-image: url("res/deserto3.png");
     background-size: cover;
 }
 
