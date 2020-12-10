@@ -1,16 +1,5 @@
 let WebSocket = require('ws')
 
-let static = require('node-static');
-let http = require('http');
-
-let file = new(static.Server)("client");
-
-http.createServer(function (req, res) {
-  file.serve(req, res);
-}).listen(80);
-
-
-
 let User = require("./user")
 let Match = require("./match")
 let Chat = require("./chat")
