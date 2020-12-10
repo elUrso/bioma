@@ -610,7 +610,7 @@ let canPlayCard = (cardIndex) => {
                   lock = true  
             })
             if(lock) return true
-        } if(card.alvo == "criatura 1") {
+        } else if(card.alvo == "criatura 1") {
             let lock = false
             Gamestate.arena.forEach(terreno => {
                 if(terreno.criatura != 0 && terreno.criatura.nivel === 1)
