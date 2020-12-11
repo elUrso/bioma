@@ -531,7 +531,7 @@ let selectCardOnHand = (handIndex, cardIndex) => {
 
 let cardDetailView = document.createElement("div")
 cardDetailView.classList.add("box")
-cardDetailView.innerHTML = `<div class="name"></div><div class="kind"></div><div class="type"></div><img src="res/Sapo_animado.gif"/><div class="spec"><div class="range"></div><div class="power"></div><div class="critical"></div><div class="life"></div><div class="resistance"></div><div class="speed"></div></div><button class="play">Jogar</button><button class="discard">Descartar</button>`
+cardDetailView.innerHTML = `<div class="name"></div><div class="kind"></div><div class="type"></div><img src="res/sapo_animado.gif"/><div class="spec"><div class="range"></div><div class="power"></div><div class="critical"></div><div class="life"></div><div class="resistance"></div><div class="speed"></div></div><button class="play">Jogar</button><button class="discard">Descartar</button>`
 
 let cardEffectDetailView = document.createElement("div")
 cardEffectDetailView.classList.add("box")
