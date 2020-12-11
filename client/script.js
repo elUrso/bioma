@@ -535,7 +535,7 @@ cardDetailView.innerHTML = `<div class="name"></div><div class="kind"></div><div
 
 let cardEffectDetailView = document.createElement("div")
 cardEffectDetailView.classList.add("box")
-cardEffectDetailView.innerHTML = `<div class="name"></div><div class="kind"></div><div class="type"></div><img src="res/Sapo_animado.gif"/><div class="text"></div><button class="play">Jogar</button><button class="discard">Descartar</button>`
+cardEffectDetailView.innerHTML = `<div class="name"></div><div class="kind"></div><div class="type"></div><img src="res/sapo_animado.gif"/><div class="text"></div><button class="play">Jogar</button><button class="discard">Descartar</button>`
 
 let renderCardDetailView = (cardIndex) => {
     let div
@@ -877,7 +877,7 @@ let mostraTerreno = (terreno, div) => {
 
 let criaturaDetailView = document.createElement("div")
 criaturaDetailView.classList.add("box")
-criaturaDetailView.innerHTML = `<div class="name"></div><div class="kind"></div><div class="type"></div><img src="res/Sapo_animado.gif"/><div class="spec"><div class="range"></div><div class="power"></div><div class="critical"></div><div class="life"></div><div class="resistance"></div><div class="speed"></div></div>`
+criaturaDetailView.innerHTML = `<div class="name"></div><div class="kind"></div><div class="type"></div><img src="res/sapo_animado.gif"/><div class="spec"><div class="range"></div><div class="power"></div><div class="critical"></div><div class="life"></div><div class="resistance"></div><div class="speed"></div></div>`
 
 let renderCriaturaDetailView = (criatura) => {
     let div = criaturaDetailView.cloneNode(true)
